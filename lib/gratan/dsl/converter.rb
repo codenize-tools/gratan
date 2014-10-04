@@ -33,7 +33,7 @@ end
       ' '
     else
       options = strip_hash_brace(options.inspect)
-      " #{options} "
+      ", #{options} "
     end
   end
 
@@ -54,7 +54,7 @@ end
 
     if with_option
       options = strip_hash_brace({:with => with_option}.inspect)
-      " #{options} "
+      ", #{options} "
     else
       ' '
     end
