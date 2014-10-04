@@ -45,9 +45,13 @@ class Gratan::Exporter
       host = grant.delete(:host)
       user_host = [user, host]
       object = grant.delete(:object)
+      identified = grant.delete(:identified)
+      required = grant.delete(:required)
 
-      packed[user_host] ||= {}
-      packed[user_host][object] = grant
+      packed[user_host] ||= {:objects => {}, :options => {}}
+      packed[user_host][:objects][object] = grant
+      packed[user_host][:options][:identified] = identified if identified
+      packed[user_host][:options][:required] = required if required
     end
 
     packed
