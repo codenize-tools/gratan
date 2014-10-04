@@ -1,5 +1,5 @@
-require 'gratan/version'
+require 'mysql2'
 
-module Gratan
-  # Your code goes here...
-end
+module Gratan; end
+require 'gratan/grant_parser'
+require 'gratan/version'
