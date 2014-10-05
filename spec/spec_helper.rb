@@ -87,12 +87,17 @@ def client(user_options = {})
   Gratan::Client.new(options)
 end
 
-def apply(client)
-  grantfile = yield
-
+def tempfile(content)
   Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
-    f.puts(grantfile)
+    f.puts(content)
     f.flush
+    f.rewind
+    yield(f)
+  end
+end
+
+def apply(client)
+  tempfile(yield) do |f|
     client.apply(f.path)
   end
 end
