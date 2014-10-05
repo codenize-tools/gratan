@@ -36,7 +36,7 @@ end
 
     it do
       apply(subject) {
-      <<-RUBY
+        <<-RUBY
 user 'bob', 'localhost' do
   on '*.*' do
     grant 'USAGE'

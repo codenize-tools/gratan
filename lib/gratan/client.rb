@@ -38,7 +38,7 @@ class Gratan::Client
   private
 
   def walk(file, options)
-    expected = load_file(file)
+    expected = load_file(file, options)
     actual = Gratan::Exporter.export(@driver, options.merge(:with_identifier => true))
 
     expected.each do |user_host, expected_attrs|
@@ -179,13 +179,13 @@ class Gratan::Client
     end
   end
 
-  def load_file(file)
+  def load_file(file, options)
     if file.kind_of?(String)
       open(file) do |f|
-        Gratan::DSL.parse(f.read, file)
+        Gratan::DSL.parse(f.read, file, options)
       end
     elsif file.respond_to?(:read)
-      Gratan::DSL.parse(file.read, file.path)
+      Gratan::DSL.parse(file.read, file.path, options)
     else
       raise TypeError, "can't convert #{file} into File"
     end

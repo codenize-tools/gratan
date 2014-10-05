@@ -12,6 +12,7 @@ end
 
 require 'gratan'
 require 'tempfile'
+require 'timecop'
 
 IGNORE_USER = /\A(|root)\z/
 
