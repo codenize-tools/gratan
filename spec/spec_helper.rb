@@ -99,8 +99,11 @@ def client(user_options = {})
   Gratan::Client.new(options)
 end
 
-def tempfile(content)
-  Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
+def tempfile(content, options = {})
+  basename = "#{File.basename __FILE__}.#{$$}"
+  basename = [basename, options[:ext]] if options[:ext]
+
+  Tempfile.open(basename) do |f|
     f.puts(content)
     f.flush
     f.rewind

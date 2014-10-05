@@ -20,7 +20,7 @@ class Gratan::DSL::Context
   private
 
   def require(file)
-    grantfile = File.expand_path(File.join(File.dirname(@path), file))
+    grantfile = (file =~ %r|\A/|) ? file : File.expand_path(File.join(File.dirname(@path), file))
 
     if File.exist?(grantfile)
       instance_eval(File.read(grantfile), grantfile)
