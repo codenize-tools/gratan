@@ -71,16 +71,13 @@ user "scott", "%" do
 
   on "test.*" do
     grant "SELECT"
+    grant "INSERT"
   end
 end
 
 user "scott", "localhost", expired: '2014/10/10' do
-  on "*.*" do
-    grant "USAGE"
-  end
-
-  on "test.*" do
-    grant "SELECT"
+  on "*.*", with: 'GRANT OPTION' do
+    grant "ALL PRIVILEGES"
   end
 end
 ```
