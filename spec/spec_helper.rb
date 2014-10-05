@@ -41,6 +41,10 @@ def clean_grants
 end
 
 def client(user_options = {})
+  if user_options[:ignore_user]
+    user_options[:ignore_user] = Regexp.union(IGNORE_USER, user_options[:ignore_user])
+  end
+
   options = {
     host: 'localhost',
     username: 'root',
