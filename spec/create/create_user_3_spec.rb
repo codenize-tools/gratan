@@ -1,15 +1,6 @@
 describe 'Gratan::Client#apply' do
-  context 'when user does not exist' do
-    subject { client }
-
-    it do
-      apply(subject) { '' }
-      expect(show_grants).to match_array []
-    end
-  end
-
   context 'when create user' do
-    subject { client }
+    subject { client(dry_run: true) }
 
     it do
       apply(subject) {
@@ -32,10 +23,7 @@ end
         RUBY
       }
 
-      expect(show_grants).to match_array [
-        "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40'",
-        "GRANT SELECT, INSERT, UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
-      ]
+      expect(show_grants).to match_array []
     end
   end
 
@@ -56,7 +44,7 @@ end
       }
     end
 
-    subject { client }
+    subject { client(dry_run: true) }
 
     it do
       apply(subject) {
@@ -92,14 +80,12 @@ end
       expect(show_grants).to match_array [
         "GRANT ALL PRIVILEGES ON *.* TO 'bob'@'%' REQUIRE SSL",
         "GRANT SELECT ON `test`.* TO 'bob'@'%'",
-        "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40'",
-        "GRANT SELECT, INSERT, UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
       ]
     end
   end
 
   context 'when create user with grant option' do
-    subject { client }
+    subject { client(dry_run: true) }
 
     it do
       apply(subject) {
@@ -122,10 +108,7 @@ end
         RUBY
       }
 
-      expect(show_grants).to match_array [
-        "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' WITH GRANT OPTION",
-        "GRANT SELECT, INSERT, UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
-      ]
+      expect(show_grants).to match_array []
     end
   end
 end

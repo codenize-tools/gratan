@@ -32,7 +32,7 @@ end
   end
 
   context 'when grant privs' do
-    subject { client }
+    subject { client(dry_run: true) }
 
     it do
       apply(subject) {
@@ -72,16 +72,16 @@ end
 
       expect(show_grants).to match_array [
         "GRANT ALL PRIVILEGES ON `test`.* TO 'bob'@'localhost'",
-        "GRANT SELECT (user), UPDATE (host) ON `mysql`.`user` TO 'scott'@'localhost'",
-        "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
-        "GRANT SELECT, INSERT, UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
+        "GRANT SELECT (user) ON `mysql`.`user` TO 'scott'@'localhost'",
+        "GRANT SELECT, INSERT ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
+        "GRANT UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
         "GRANT USAGE ON *.* TO 'bob'@'localhost'",
       ]
     end
   end
 
   context 'when revoke privs' do
-    subject { client }
+    subject { client(dry_run: true) }
 
     it do
       apply(subject) {
@@ -110,15 +110,16 @@ end
 
       expect(show_grants).to match_array [
         "GRANT ALL PRIVILEGES ON `test`.* TO 'bob'@'localhost'",
-        "GRANT SELECT ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
-        "GRANT UPDATE (host) ON `mysql`.`user` TO 'scott'@'localhost'",
+        "GRANT SELECT (user) ON `mysql`.`user` TO 'scott'@'localhost'",
+        "GRANT SELECT, INSERT ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
+        "GRANT UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
         "GRANT USAGE ON *.* TO 'bob'@'localhost'",
       ]
     end
   end
 
   context 'when grant/revoke privs' do
-    subject { client }
+    subject { client(dry_run: true) }
 
     it do
       apply(subject) {
@@ -152,11 +153,11 @@ end
       }
 
       expect(show_grants).to match_array [
-        "GRANT ALL PRIVILEGES ON `test`.* TO 'mary'@'localhost'",
-        "GRANT SELECT, INSERT ON `test`.* TO 'scott'@'localhost'",
-        "GRANT UPDATE (host) ON `mysql`.`user` TO 'scott'@'localhost'",
-        "GRANT UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
-        "GRANT USAGE ON *.* TO 'mary'@'localhost'",
+        "GRANT ALL PRIVILEGES ON `test`.* TO 'bob'@'localhost'",
+        "GRANT SELECT (user) ON `mysql`.`user` TO 'scott'@'localhost'",
+        "GRANT SELECT, INSERT ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
+        "GRANT UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
+        "GRANT USAGE ON *.* TO 'bob'@'localhost'",
       ]
     end
   end

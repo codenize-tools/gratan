@@ -96,8 +96,8 @@ def tempfile(content)
   end
 end
 
-def apply(client)
+def apply(cli = client)
   tempfile(yield) do |f|
-    client.apply(f.path)
+    cli.apply(f.path)
   end
 end

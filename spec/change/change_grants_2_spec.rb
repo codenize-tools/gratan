@@ -1,6 +1,6 @@
 describe 'Gratan::Client#apply' do
   before(:each) do
-    apply(subject) {
+    apply {
       <<-RUBY
 user 'scott', 'localhost', identified: 'tiger', required: 'SSL' do
   on '*.*' do
