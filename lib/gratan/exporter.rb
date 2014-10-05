@@ -12,6 +12,8 @@ class Gratan::Exporter
     grants = []
 
     @driver.each_user do |user, host|
+      next if user =~ @options[:ignore_user]
+
       @driver.show_grants(user, host) do |stmt|
         grants << Gratan::GrantParser.parse(stmt)
       end

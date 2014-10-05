@@ -26,6 +26,7 @@ class Gratan::Client
     actual = Gratan::Exporter.export(@driver, options)
 
     expected.each do |user_host, expected_attrs|
+      next if user_host[0] =~ options[:ignore_user]
       actual_attrs = actual.delete(user_host)
 
       if actual_attrs
@@ -36,6 +37,7 @@ class Gratan::Client
     end
 
     actual.each do |user_host, attrs|
+      next if user_host[0] =~ options[:ignore_user]
       drop_user(*user_host)
     end
   end
