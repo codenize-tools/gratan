@@ -28,6 +28,7 @@ class Gratan::Client
       if actual_attrs
         walk_user(*user_host, expected_attrs, actual_attrs)
       else
+        # XXX: Add password proc
         @driver.create_user(*user_host, expected_attrs)
       end
     end
