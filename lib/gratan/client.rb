@@ -91,7 +91,7 @@ class Gratan::Client
 
   def walk_object(user, host, object, expected_options, actual_options)
     walk_with_option(user, host, object, expected_options[:with], actual_options[:with])
-    #walk_privs
+    walk_privs(user, host, object, expected_options[:privs], actual_options[:privs])
   end
 
   def walk_with_option(user, host, object, expected_with_option, actual_with_option)
@@ -100,6 +100,36 @@ class Gratan::Client
 
     if expected_with_option != actual_with_option
       @driver.update_with_option(user, host, object, expected_with_option)
+    end
+  end
+
+  def walk_privs(user, host, object, expected_privs, actual_privs)
+    expected_privs = normalize_privs(expected_privs)
+    actual_privs = normalize_privs(actual_privs)
+
+    revoke_privs = actual_privs - expected_privs
+    grant_privs = expected_privs - actual_privs
+
+    unless revoke_privs.empty?
+      @driver.revoke(user, host, object, :privs => revoke_privs)
+    end
+
+    unless grant_privs.empty?
+      @driver.grant(user, host, object, :privs => grant_privs)
+    end
+  end
+
+  def normalize_privs(privs)
+    privs.map do |priv|
+      priv = priv.split('(', 2)
+      priv[0].upcase!
+
+      if priv[1]
+        priv[1] = priv[1].split(',').map {|i| i.gsub(')', '').strip }.sort.join(', ')
+        priv[1] << ')'
+      end
+
+      priv.join('(')
     end
   end
 
