@@ -25,20 +25,20 @@ options = {
 
 ARGV.options do |opt|
   begin
-    opt.on('', '--host HOST')            {|v| mysql_options[:host]      = v             }
-    opt.on('', '--port PORT', Integer)   {|v| mysql_options[:port]      = v             }
-    opt.on('', '--socket SOCKET')        {|v| mysql_options[:socket]    = v             }
-    opt.on('', '--username USERNAME')    {|v| mysql_options[:username]  = v             }
-    opt.on('', '--password PASSWORD')    {|v| mysql_options[:password]  = v             }
-    opt.on('', '--database DATABASE')    {|v| mysql_options[:database]  = v             }
+    opt.on(''  , '--host HOST')          {|v| mysql_options[:host]      = v             }
+    opt.on(''  , '--port PORT', Integer) {|v| mysql_options[:port]      = v             }
+    opt.on(''  , '--socket SOCKET')      {|v| mysql_options[:socket]    = v             }
+    opt.on(''  , '--username USERNAME')  {|v| mysql_options[:username]  = v             }
+    opt.on(''  , '--password PASSWORD')  {|v| mysql_options[:password]  = v             }
+    opt.on(''  , '--database DATABASE')  {|v| mysql_options[:database]  = v             }
     opt.on('-a', '--apply')              {    mode                      = :apply        }
     opt.on('-f', '--file FILE')          {|v| file                      = v             }
-    opt.on('',   '--dry-run')            {    options[:dry_run]         = true          }
+    opt.on(''  , '--dry-run')            {    options[:dry_run]         = true          }
     opt.on('-e', '--export')             {    mode                      = :export       }
-    opt.on('',   '--with-identifier')    {    options[:with_identifier] = true          }
-    opt.on('',   '--enable-expired')     {    options[:enable_expired]  = true          }
+    opt.on(''  , '--with-identifier')    {    options[:with_identifier] = true          }
+    opt.on(''  , '--enable-expired')     {    options[:enable_expired]  = true          }
     opt.on('-o', '--output FILE')        {|v| output_file               = v             }
-    opt.on('',   '--ignore-user REGEXP') {|v| options[:ignore_user]     = Regexp.new(v) }
+    opt.on(''  , '--ignore-user REGEXP') {|v| options[:ignore_user]     = Regexp.new(v) }
     opt.on(''  , '--no-color')           {    options[:color]           = false         }
     opt.on(''  , '--debug')              {    options[:debug]           = true          }
 
