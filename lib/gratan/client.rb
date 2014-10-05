@@ -28,14 +28,22 @@ class Gratan::Client
       if actual_attrs
         walk_user(*user_host, expected_attrs, actual_attrs)
       else
-        # XXX: Add password proc
-        @driver.create_user(*user_host, expected_attrs)
+        create_user(*user_host, expected_attrs)
       end
     end
 
     actual.each do |user_host, attrs|
-      @driver.drop_user(*user_host)
+      drop_user(*user_host)
     end
+  end
+
+  def create_user(user, host, attrs)
+    # XXX: Add password proc
+    @driver.create_user(user, host, attrs)
+  end
+
+  def drop_user(user, host)
+    @driver.drop_user(user, host)
   end
 
   def walk_user(user, host, expected_attrs, actual_attrs)
@@ -49,14 +57,22 @@ class Gratan::Client
   end
 
   def walk_options(user, host, expected_options, actual_options)
-    walk_identified(user, host, expected_options[:identified], actual_options[:identified])
-    # XXX:
-    # walk_required
+    if expected_options.has_key?(:identified)
+      walk_identified(user, host, expected_options[:identified], actual_options[:identified])
+    end
+
+    walk_required(user, host, expected_options[:required], actual_options[:required])
   end
 
   def walk_identified(user, host, expected_identified, actual_identified)
     if expected_identified != actual_identified
       @driver.identify(user, host, expected_identified)
+    end
+  end
+
+  def walk_required(user, host, expected_required, actual_required)
+    if expected_required != actual_required
+      @driver.set_require(user, host, expected_required)
     end
   end
 

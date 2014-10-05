@@ -60,6 +60,17 @@ class Gratan::Driver
     update(sql)
   end
 
+  def set_require(user, host, required)
+    required ||= 'NONE'
+
+    sql = 'GRANT USAGE ON *.* TO %s REQUIRE %s' % [
+      quote_user(user, host),
+      required
+    ]
+
+    update(sql)
+  end
+
   private
 
   def read(sql)
