@@ -71,6 +71,22 @@ class Gratan::Driver
     update(sql)
   end
 
+  def revoke_all(user, host, object, with_option)
+    privs = ['ALL PRIVILEGES']
+
+    if with_option =~ /\bGRANT\s+OPTION\b/i
+      privs << 'GRANT OPTION'
+    end
+
+    sql = 'REVOKE %s ON %s FROM %s' % [
+      privs.join(', '),
+      object,
+      quote_user(user, host),
+    ]
+
+    delete(sql)
+  end
+
   private
 
   def read(sql)

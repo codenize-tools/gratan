@@ -47,13 +47,8 @@ class Gratan::Client
   end
 
   def walk_user(user, host, expected_attrs, actual_attrs)
-    expected_objects = expected_attrs[:objects]
-    expected_options = expected_attrs[:options]
-    actual_objects = actual_attrs[:objects]
-    actual_options = actual_attrs[:options]
-    walk_options(user, host, expected_options, actual_options)
-    # XXX:
-    # walk_objects
+    walk_options(user, host, expected_attrs[:options], actual_attrs[:options])
+    walk_objects(user, host, expected_attrs[:objects], actual_attrs[:objects])
   end
 
   def walk_options(user, host, expected_options, actual_options)
@@ -73,6 +68,22 @@ class Gratan::Client
   def walk_required(user, host, expected_required, actual_required)
     if expected_required != actual_required
       @driver.set_require(user, host, expected_required)
+    end
+  end
+
+  def walk_objects(user, host, expected_objects, actual_objects)
+    expected_objects.each do |object, expected_options|
+      actual_options = actual_objects.delete(object)
+
+      if actual_options
+        # XXX:
+      else
+        # XXX:
+      end
+    end
+
+    actual_objects.each do |object, options|
+      @driver.revoke_all(user, host, object, options[:with])
     end
   end
 
