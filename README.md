@@ -1,6 +1,11 @@
 # Gratan
 
-TODO: Write a gem description
+Gratan is a tool to manage MySQL permissions.
+It defines the state of MySQL permissions using Ruby DSL, and updates permissions according to DSL.
+
+[![Gem Version](https://badge.fury.io/rb/gratan.png)](http://badge.fury.io/rb/gratan)
+[![Build Status](https://travis-ci.org/winebarrel/gratan.svg?branch=master)](https://travis-ci.org/winebarrel/gratan)
+[![Coverage Status](https://coveralls.io/repos/winebarrel/gratan/badge.png?branch=master)](https://coveralls.io/r/winebarrel/gratan?branch=master)
 
 ## Installation
 
@@ -20,12 +25,61 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```sh
+gratan -e -o Grantfile
+vi Grantfile
+gratan -a --dry-run
+gratan -a
+```
 
-## Contributing
+## Help
 
-1. Fork it ( https://github.com/[my-github-username]/gratan/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+```sh
+Usage: gratan [options]
+        --host HOST
+        --port PORT
+        --socket SOCKET
+        --username USERNAME
+        --password PASSWORD
+        --database DATABASE
+    -a, --apply
+    -f, --file FILE
+        --dry-run
+    -e, --export
+        --with-identifier
+        --enable-expired
+        --split
+    -o, --output FILE
+        --ignore-user REGEXP
+        --no-color
+        --debug
+        --auto-identify OUTPUT
+        --csv-identify CSV
+    -h, --help
+```
+
+## Grantfile example
+
+```ruby
+require 'other/grantfile'
+
+user "scott", "%" do
+  on "*.*" do
+    grant "USAGE"
+  end
+
+  on "test.*" do
+    grant "SELECT"
+  end
+end
+
+user "scott", "localhost", expired: '2014/10/10' do
+  on "*.*" do
+    grant "USAGE"
+  end
+
+  on "test.*" do
+    grant "SELECT"
+  end
+end
+```
