@@ -38,3 +38,19 @@ def clean_grants
     end
   end
 end
+
+def client(user_options = {})
+  options = {
+    host: 'localhost',
+    username: 'root',
+    ignore_user: IGNORE_USER,
+  }
+
+  if ENV['DEBUG']
+    options[:debug] = true
+    Gratan::Logger.instance.set_debug(true)
+  end
+
+  options = options.merge(user_options)
+  Gratan::Client.new(options)
+end
