@@ -84,3 +84,7 @@ user "scott", "localhost", expired: '2014/10/10' do
   end
 end
 ```
+
+# What does "Gratan" mean?
+
+![](http://i.gyazo.com/c37d934ba0a61f760603ce4c56401e60.png)
