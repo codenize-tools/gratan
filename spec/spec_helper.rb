@@ -1,8 +1,4 @@
 $: << File.expand_path('..', __FILE__)
-require 'gratan'
-require 'tempfile'
-
-IGNORE_USER = /\A(|root)\z/
 
 if ENV['TRAVIS']
   require 'simplecov'
@@ -13,6 +9,11 @@ if ENV['TRAVIS']
     add_filter "spec/"
   end
 end
+
+require 'gratan'
+require 'tempfile'
+
+IGNORE_USER = /\A(|root)\z/
 
 RSpec.configure do |config|
   config.before(:each) do
