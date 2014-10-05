@@ -1,6 +1,6 @@
 class Gratan::Exporter
-  def self.export(driver, options = {})
-    self.new(driver, options).export
+  def self.export(driver, options = {}, &block)
+    self.new(driver, options).export(&block)
   end
 
   def initialize(driver, options = {})

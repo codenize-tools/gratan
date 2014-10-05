@@ -11,6 +11,7 @@ DEFAULT_FILENAME = 'Grantfile'
 mode = nil
 file = DEFAULT_FILENAME
 output_file = '-'
+split = false
 
 mysql_options = {
   :host     => 'localhost',
@@ -37,6 +38,7 @@ ARGV.options do |opt|
     opt.on('-e', '--export')             {    mode                      = :export       }
     opt.on(''  , '--with-identifier')    {    options[:with_identifier] = true          }
     opt.on(''  , '--enable-expired')     {    options[:enable_expired]  = true          }
+    opt.on(''  , '--split')              {    split                     = true          }
     opt.on('-o', '--output FILE')        {|v| output_file               = v             }
     opt.on(''  , '--ignore-user REGEXP') {|v| options[:ignore_user]     = Regexp.new(v) }
     opt.on(''  , '--no-color')           {    options[:color]           = false         }
@@ -72,14 +74,36 @@ begin
 
   case mode
   when :export
-    # XXX: Add split mode
+    if split
+      logger.info('Export Grants')
+      output_file = DEFAULT_FILENAME if output_file == '-'
+      requires = []
 
-    if output_file == '-'
-      logger.info('# Export Grants')
-      puts client.export(options)
+      client.export do |user, dsl|
+        grant_file = File.join(File.dirname(output_file), "#{user}.grant")
+        requires << grant_file
+        logger.info("  write `#{grant_file}`")
+
+        open(grant_file, 'wb') do |f|
+          f.puts dsl
+        end
+      end
+
+      logger.info("  write `#{output_file}`")
+
+      open(output_file, 'wb') do |f|
+        requires.each do |grant_file|
+          f.puts "require '#{File.basename grant_file}'"
+        end
+      end
     else
-      logger.info("Export Grants to `#{output_file}`")
-      open(output_file, 'wb') {|f| f.puts client.export(options) }
+      if output_file == '-'
+        logger.info('# Export Grants')
+        puts client.export(options)
+      else
+        logger.info("Export Grants to `#{output_file}`")
+        open(output_file, 'wb') {|f| f.puts client.export(options) }
+      end
     end
   when :apply
     unless File.exist?(file)

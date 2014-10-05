@@ -9,7 +9,22 @@ class Gratan::Client
   def export(options = {})
     options = @options.merge(options)
     exported = Gratan::Exporter.export(@driver, options)
-    Gratan::DSL.convert(exported, options)
+
+    if block_given?
+      exported.sort_by {|user_host, attrs|
+        user_host
+      }.chunk {|user_host, attrs|
+        user_host[0].empty? ? 'root' : user_host[0]
+      }.each {|user, grants|
+        h = {}
+        grants.each {|k, v| h[k] = v }
+        dsl = Gratan::DSL.convert(h, options)
+        yield(user, dsl)
+      }
+    else
+      exported = Gratan::Exporter.export(@driver, options)
+      Gratan::DSL.convert(exported, options)
+    end
   end
 
   def apply(file, options = {})
