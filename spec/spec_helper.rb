@@ -4,6 +4,16 @@ require 'tempfile'
 
 IGNORE_USER = /\A(|root)\z/
 
+if ENV['TRAVIS']
+  require 'simplecov'
+  require 'coveralls'
+
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+  SimpleCov.start do
+    add_filter "spec/"
+  end
+end
+
 RSpec.configure do |config|
   config.before(:each) do
     clean_grants
