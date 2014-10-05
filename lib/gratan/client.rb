@@ -1,6 +1,7 @@
 class Gratan::Client
   def initialize(options = {})
     @options = options
+    @options[:identifier] ||= Gratan::Identifier::Null.new
     client = Mysql2::Client.new(options)
     @driver = Gratan::Driver.new(client, options)
   end

@@ -1,5 +1,5 @@
 class Gratan::Identifier::Null
-  def identify
+  def identify(user, host)
     nil
   end
 end

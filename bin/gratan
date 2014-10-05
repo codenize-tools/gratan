@@ -19,7 +19,6 @@ mysql_options = {
 
 options = {
   :dry_run    => false,
-  :identifier => Gratan::Identifier::Null.new,
   :color      => true,
   :debug      => false,
 }
@@ -73,6 +72,8 @@ begin
 
   case mode
   when :export
+    # XXX: Add split mode
+
     if output_file == '-'
       logger.info('# Export Grants')
       puts client.export(options)

@@ -1,5 +1,6 @@
 $: << File.expand_path('..', __FILE__)
 require 'gratan'
+require 'tempfile'
 
 IGNORE_USER = /\A(|root)\z/
 
@@ -44,13 +45,29 @@ def client(user_options = {})
     host: 'localhost',
     username: 'root',
     ignore_user: IGNORE_USER,
+    logger: Logger.new('/dev/null'),
   }
 
   if ENV['DEBUG']
-    options[:debug] = true
-    Gratan::Logger.instance.set_debug(true)
+    logger = Gratan::Logger.instance
+    logger.set_debug(true)
+
+    options.update(
+      debug: true,
+      logger: logger
+    )
   end
 
   options = options.merge(user_options)
   Gratan::Client.new(options)
+end
+
+def apply(client)
+  grantfile = yield
+
+  Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
+    f.puts(grantfile)
+    f.flush
+    client.apply(f.path)
+  end
 end
