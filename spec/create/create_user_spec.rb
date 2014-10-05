@@ -166,4 +166,26 @@ end
       }.to raise_error('User `scott@localhost` is already defined')
     end
   end
+
+  context 'when duplicata object' do
+    subject { client }
+
+    it do
+      dsl = <<-RUBY
+user 'scott', 'localhost', required: 'SSL' do
+  on '*.*' do
+    grant 'ALL PRIVILEGES'
+  end
+
+  on '*.*' do
+    grant 'SELECT'
+  end
+end
+      RUBY
+
+      expect {
+        apply(subject) { dsl }
+      }.to raise_error('User `scott@localhost`: Object `*.*` is already defined')
+    end
+  end
 end
