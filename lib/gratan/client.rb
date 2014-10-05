@@ -1,12 +1,13 @@
 class Gratan::Client
   def initialize(options = {})
     @options = options
-    @client = Mysql2::Client.new(options)
+    client = Mysql2::Client.new(options)
+    @driver = Gratan::Driver.new(client, options)
   end
 
   def export(options = {})
     options = @options.merge(options)
-    exported = Gratan::Exporter.export(@client, options)
+    exported = Gratan::Exporter.export(@driver, options)
     Gratan::DSL.convert(exported, options)
   end
 
@@ -19,13 +20,21 @@ class Gratan::Client
 
   def walk(file, options)
     expected = load_file(file)
-    actual = Gratan::Exporter.export(@client, options)
+    actual = Gratan::Exporter.export(@driver, options)
 
-    require 'pp'
-    pp expected
-    puts '-' * 32
-    pp actual
-    # XXX:
+    expected.each do |expected_user_host, expected_attrs|
+      actual_user_host, actual_attrs = actual.delete(expected_user_host)
+
+      if actual_user_host
+        # XXX:
+      else
+        @driver.create_user(*expected_user_host, expected_attrs)
+      end
+    end
+
+    actual.each do |actual_user_host, actual_attrs|
+      @driver.drop_user(*actual_user_host)
+    end
   end
 
   def load_file(file)
