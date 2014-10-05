@@ -84,4 +84,4 @@ end
 
 ## What does "Gratan" mean?
 
-![](http://i.gyazo.com/c37d934ba0a61f760603ce4c56401e60.png)
+[![](http://i.gyazo.com/c37d934ba0a61f760603ce4c56401e60.png)](https://www.google.co.jp/search?q=gratin&tbm=isch)
