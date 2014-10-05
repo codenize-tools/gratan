@@ -1,6 +1,7 @@
 # Gratan
 
 Gratan is a tool to manage MySQL permissions.
+
 It defines the state of MySQL permissions using Ruby DSL, and updates permissions according to DSL.
 
 [![Gem Version](https://badge.fury.io/rb/gratan.png)](http://badge.fury.io/rb/gratan)
