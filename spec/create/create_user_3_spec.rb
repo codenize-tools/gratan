@@ -3,7 +3,7 @@ describe 'Gratan::Client#apply' do
     subject { client(dry_run: true) }
 
     it do
-      apply(subject) {
+      result = apply(subject) {
         <<-RUBY
 user 'scott', 'localhost', identified: 'tiger' do
   on '*.*' do
@@ -23,6 +23,7 @@ end
         RUBY
       }
 
+      expect(result).to be_falsey
       expect(show_grants).to match_array []
     end
   end
