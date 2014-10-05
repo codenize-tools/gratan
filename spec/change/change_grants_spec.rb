@@ -122,7 +122,7 @@ end
 
     it do
       apply(subject) {
-      <<-RUBY
+        <<-RUBY
 user 'scott', 'localhost', identified: 'tiger', required: 'SSL' do
   on '*.*' do
     grant 'UPDATE'

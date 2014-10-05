@@ -39,7 +39,7 @@ class Gratan::Client
 
   def walk(file, options)
     expected = load_file(file)
-    actual = Gratan::Exporter.export(@driver, options)
+    actual = Gratan::Exporter.export(@driver, options.merge(:with_identifier => true))
 
     expected.each do |user_host, expected_attrs|
       next if user_host[0] =~ options[:ignore_user]
