@@ -32,8 +32,8 @@ class Gratan::Driver
     delete(sql)
   end
 
-  def grant(user, host, object, options = {})
-    privs = options[:privs]
+  def grant(user, host, object, options)
+    privs = options.fetch(:privs)
     identified = options[:identified]
     required = options[:required]
     with_option = options[:with]
@@ -71,8 +71,9 @@ class Gratan::Driver
     update(sql)
   end
 
-  def revoke_all(user, host, object, with_option)
-    privs = ['ALL PRIVILEGES']
+  def revoke(user, host, object, options = {})
+    privs = options.fetch(:privs)
+    with_option = options[:with]
 
     if with_option =~ /\bGRANT\s+OPTION\b/i
       privs << 'GRANT OPTION'
