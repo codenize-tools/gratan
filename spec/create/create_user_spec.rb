@@ -128,4 +128,42 @@ end
       ]
     end
   end
+
+  context 'when duplicata user' do
+    subject { client }
+
+    it do
+      dsl = <<-RUBY
+user 'scott', 'localhost', required: 'SSL' do
+  on '*.*' do
+    grant 'ALL PRIVILEGES'
+  end
+
+  on 'test.*' do
+    grant 'SELECT'
+  end
+end
+
+user 'scott', 'localhost', identified: 'tiger' do
+  on '*.*' do
+    grant 'SELECT'
+    grant 'INSERT'
+    grant 'UPDATE'
+    grant 'DELETE'
+  end
+
+  on 'test.*' do
+    grant 'SELECT'
+    grant 'INSERT'
+    grant 'UPDATE'
+    grant 'DELETE'
+  end
+end
+      RUBY
+
+      expect {
+        apply(subject) { dsl }
+      }.to raise_error('User `scott@localhost` is already defined')
+    end
+  end
 end
