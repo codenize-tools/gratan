@@ -40,7 +40,7 @@ class Gratan::Driver
 
     sql = 'GRANT %s ON %s TO %s' % [
       privs.join(', '),
-      object,
+      quote_object(object),
       quote_user(user, host),
     ]
 
@@ -76,12 +76,20 @@ class Gratan::Driver
     with_option = options[:with]
 
     if with_option =~ /\bGRANT\s+OPTION\b/i
-      privs << 'GRANT OPTION'
+      revoke0(user, host, object, ['GRANT OPTION'])
+
+      if privs.length == 1 and privs[0] =~ /\AUSAGE\z/i
+        return
+      end
     end
 
+    revoke0(user, host, object, privs)
+  end
+
+  def revoke0(user, host, object, privs)
     sql = 'REVOKE %s ON %s FROM %s' % [
       privs.join(', '),
-      object,
+      quote_object(object),
       quote_user(user, host),
     ]
 
@@ -140,6 +148,10 @@ class Gratan::Driver
 
   def quote_user(user, host)
     "'%s'@'%s'" % [escape(user), escape(host)]
+  end
+
+  def quote_object(object)
+    object.split('.', 2).map {|i| "`#{i}`" }.join('.')
   end
 
   def quote_identifier(identifier)

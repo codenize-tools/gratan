@@ -85,7 +85,7 @@ class Gratan::Client
 
     actual_objects.each do |object, options|
       options ||= {}
-      @driver.revoke(user, host, object, options.merge(:privs => ['ALL PRIVILEGES']))
+      @driver.revoke(user, host, object, options)
     end
   end
 
