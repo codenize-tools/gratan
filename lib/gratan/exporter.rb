@@ -35,8 +35,11 @@ class Gratan::Exporter
 
       packed[user_host] ||= {:objects => {}, :options => {}}
       packed[user_host][:objects][object] = grant
-      packed[user_host][:options][:identified] = identified if identified
       packed[user_host][:options][:required] = required if required
+
+      if @options[:with_identifier] and identified
+        packed[user_host][:options][:identified] = identified
+      end
     end
 
     packed
