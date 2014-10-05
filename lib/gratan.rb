@@ -2,6 +2,7 @@ require 'logger'
 require 'mysql2'
 require 'singleton'
 require 'term/ansicolor'
+require 'time'
 
 module Gratan; end
 require 'gratan/logger'

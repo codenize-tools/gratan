@@ -1,5 +1,6 @@
 class Gratan::DSL::Context
   include Gratan::DSL::Validator
+  include Gratan::Logger::Helper
 
   def self.eval(dsl, path, options = {})
     self.new(path, options) do
@@ -37,6 +38,15 @@ class Gratan::DSL::Context
 
     __validate("User `#{name}@#{host}` is already defined") do
       not @result.has_key?([name, host])
+    end
+
+    if @options[:enable_expired] and (expired = options.delete(:expired))
+      expired = Time.parse(expired)
+
+      if Time.new >= expired
+        log(:warn, "User `#{name}@#{host}` has expired", :yellow)
+        return
+      end
     end
 
     @result[[name, host]] = {
