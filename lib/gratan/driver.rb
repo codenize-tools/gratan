@@ -13,7 +13,7 @@ class Gratan::Driver
   end
 
   def show_grants(user, host)
-    read("SHOW GRANTS FOR '#{escape(user)}'@'#{escape(host)}'").each do |row|
+    read("SHOW GRANTS FOR #{quote_user(user, host)}").each do |row|
       yield(row.values.first)
     end
   end
@@ -28,7 +28,7 @@ class Gratan::Driver
   end
 
   def drop_user(user, host)
-    sql = "DROP USER '%s'@'%s'" % [escape(user), escape(host)]
+    sql = "DROP USER #{quote_user(user, host)}"
     delete(sql)
   end
 
@@ -41,12 +41,21 @@ class Gratan::Driver
     sql = 'GRANT %s ON %s TO %s' % [
       privs.join(', '),
       object,
-      "'%s'@'%s'" % [escape(user), escape(host)],
+      quote_user(user, host),
     ]
 
-    sql << "IDENTIFIED BY #{identified}" if identified
+    sql << "IDENTIFIED BY #{quote_identifier(identified)}" if identified
     sql << "REQUIRE #{required}" if required
     sql << "WITH #{with_option}" if with_option
+
+    update(sql)
+  end
+
+  def identify(user, host, identifier)
+    sql = 'GRANT USAGE ON *.* TO %s IDENTIFIED BY %s' % [
+      quote_user(user, host),
+      quote_identifier(identifier),
+    ]
 
     update(sql)
   end
@@ -70,5 +79,19 @@ class Gratan::Driver
 
   def escape(str)
     @client.escape(str)
+  end
+
+  def quote_user(user, host)
+    "'%s'@'%s'" % [escape(user), escape(host)]
+  end
+
+  def quote_identifier(identifier)
+    identifier ||= ''
+
+    unless identifier =~ /\APASSWORD\s+'.+'\z/
+      identifier = "'#{escape(identifier)}'"
+    end
+
+    identifier
   end
 end
