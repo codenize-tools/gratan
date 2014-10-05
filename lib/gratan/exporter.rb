@@ -1,18 +1,18 @@
 class Gratan::Exporter
-  def self.export(client, options = {})
-    self.new(client, options).export
+  def self.export(driver, options = {})
+    self.new(driver, options).export
   end
 
-  def initialize(client, options = {})
-    @client = client
+  def initialize(driver, options = {})
+    @driver = driver
     @options = options
   end
 
   def export
     grants = []
 
-    each_user do |user, host|
-      show_grants(user, host) do |stmt|
+    @driver.each_user do |user, host|
+      @driver.show_grants(user, host) do |stmt|
         grants << Gratan::GrantParser.parse(stmt)
       end
     end
@@ -21,21 +21,6 @@ class Gratan::Exporter
   end
 
   private
-
-  def each_user
-    @client.query('SELECT user, host FROM mysql.user').each do |row|
-      yield(row['user'], row['host'])
-    end
-  end
-
-  def show_grants(user, host)
-    user = user.gsub("'", "\\\\'")
-    host = host.gsub("'", "\\\\'")
-
-    @client.query("SHOW GRANTS FOR '#{user}'@'#{host}'").each do |row|
-      yield(row.values.first)
-    end
-  end
 
   def pack(grants)
     packed = {}
