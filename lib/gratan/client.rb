@@ -77,7 +77,7 @@ class Gratan::Client
       actual_options = actual_objects.delete(object)
 
       if actual_options
-        # XXX:
+        walk_object(user, host, object, expected_options, actual_options)
       else
         @driver.grant(user, host, object, expected_options)
       end
@@ -86,6 +86,20 @@ class Gratan::Client
     actual_objects.each do |object, options|
       options ||= {}
       @driver.revoke(user, host, object, options.merge(:privs => ['ALL PRIVILEGES']))
+    end
+  end
+
+  def walk_object(user, host, object, expected_options, actual_options)
+    walk_with_option(user, host, object, expected_options[:with], actual_options[:with])
+    #walk_privs
+  end
+
+  def walk_with_option(user, host, object, expected_with_option, actual_with_option)
+    expected_with_option = (expected_with_option || '').upcase
+    actual_with_option = (actual_with_option || '').upcase
+
+    if expected_with_option != actual_with_option
+      @driver.update_with_option(user, host, object, expected_with_option)
     end
   end
 

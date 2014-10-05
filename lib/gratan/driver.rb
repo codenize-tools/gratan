@@ -44,9 +44,9 @@ class Gratan::Driver
       quote_user(user, host),
     ]
 
-    sql << "IDENTIFIED BY #{quote_identifier(identified)}" if identified
-    sql << "REQUIRE #{required}" if required
-    sql << "WITH #{with_option}" if with_option
+    sql << " IDENTIFIED BY #{quote_identifier(identified)}" if identified
+    sql << " REQUIRE #{required}" if required
+    sql << " WITH #{with_option}" if with_option
 
     update(sql)
   end
@@ -86,6 +86,35 @@ class Gratan::Driver
     ]
 
     delete(sql)
+  end
+
+  def update_with_option(user, host, object, with_option)
+    options = []
+
+    if with_option =~ /\bGRANT\s+OPTION\b/i
+      options << 'GRANT OPTION'
+    else
+      revoke(user, host, object, :privs => ['GRANT OPTION'])
+    end
+
+    %w(
+      MAX_QUERIES_PER_HOUR
+      MAX_UPDATES_PER_HOUR
+      MAX_CONNECTIONS_PER_HOUR
+      MAX_USER_CONNECTIONS
+    ).each do |name|
+      count = 0
+
+      if with_option =~ /\b#{name}\s+(\d+)\b/i
+        coount = $1
+      end
+
+      options << [name, count].join(' ')
+    end
+
+    unless options.empty?
+      grant(user, host, object, :privs => ['USAGE'], :with => options.join(' '))
+    end
   end
 
   private
