@@ -18,9 +18,10 @@ mysql_options = {
 }
 
 options = {
-  :dry_run => false,
-  :color   => true,
-  :debug   => false,
+  :dry_run    => false,
+  :identifier => Gratan::Identifier::Null.new,
+  :color      => true,
+  :debug      => false,
 }
 
 ARGV.options do |opt|
@@ -41,6 +42,9 @@ ARGV.options do |opt|
     opt.on(''  , '--ignore-user REGEXP') {|v| options[:ignore_user]     = Regexp.new(v) }
     opt.on(''  , '--no-color')           {    options[:color]           = false         }
     opt.on(''  , '--debug')              {    options[:debug]           = true          }
+
+    opt.on(''  , '--auto-identify OUTPUT') {|v| options[:identifier] = Gratan::Identifier::Auto.new(v) }
+    opt.on(''  , '--csv-identify CSV')     {|v| options[:identifier] = Gratan::Identifier::CSV.new(v)  }
 
     opt.on('-h', '--help') do
       puts opt.help

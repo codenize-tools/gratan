@@ -43,7 +43,13 @@ class Gratan::Client
   end
 
   def create_user(user, host, attrs)
-    # XXX: Add password proc
+    attrs[:options] ||= {}
+
+    unless attrs.has_key?(:identified)
+      identified = @options[:identifier].identify(user, host)
+      attrs[:options][:identified] = identified if identified
+    end
+
     @driver.create_user(user, host, attrs)
     update!
   end
