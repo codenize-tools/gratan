@@ -24,20 +24,41 @@ def mysql
   retval
 end
 
+def select_users(client)
+  users = []
+
+  client.query('SELECT user, host FROM mysql.user').each do |row|
+    users << [row['user'], row['host']]
+  end
+
+  users
+end
+
 def clean_grants
   mysql do |client|
-    users = []
-
-    client.query('SELECT user, host FROM mysql.user').each do |row|
-      users << [row['user'], row['host']]
-    end
-
-    users.each do |user, host|
+    select_users(client).each do |user, host|
       next if IGNORE_USER =~ user
-      user_host = "'%s'@'%s'" % [client.escape(user), client.escape(host)]
+      user_host =  "'%s'@'%s'" % [client.escape(user), client.escape(host)]
       client.query("DROP USER #{user_host}")
     end
   end
+end
+
+def show_grants
+  grants = []
+
+  mysql do |client|
+    select_users(client).each do |user, host|
+      next if IGNORE_USER =~ user
+      user_host =  "'%s'@'%s'" % [client.escape(user), client.escape(host)]
+
+      client.query("SHOW GRANTS FOR #{user_host}").each do |row|
+        grants << row.values.first
+      end
+    end
+  end
+
+  grants.sort
 end
 
 def client(user_options = {})

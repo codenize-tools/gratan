@@ -8,7 +8,7 @@ describe 'Gratan::Client#export' do
   end
 
   context 'when user exists' do
-    let(:grantfile) do
+    let(:grantfile) {
       <<-RUBY
 user "scott", "%" do
   on "*.*" do
@@ -30,7 +30,7 @@ user "scott", "localhost" do
   end
 end
       RUBY
-    end
+    }
 
     subject { client }
 
@@ -46,7 +46,7 @@ end
   end
 
   context 'when ignore user exists' do
-    let(:grantfile) do
+    let(:grantfile) {
       <<-RUBY
 user "scott", "%" do
   on "*.*" do
@@ -68,7 +68,7 @@ user "bob", "localhost" do
   end
 end
       RUBY
-    end
+    }
 
     subject { client(ignore_user: /\Abob\z/) }
 
