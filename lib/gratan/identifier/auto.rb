@@ -1,5 +1,7 @@
 class Gratan::Identifier::Auto
-  def initialize(output)
+  def initialize(output, options = {})
+    @options = options
+
     if output == '-'
       @output = $stdout
     else

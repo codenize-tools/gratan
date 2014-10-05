@@ -64,8 +64,6 @@ end
         RUBY
       }
 
-      puts show_grants
-
       expect(show_grants).to match_array [
         "GRANT ALL PRIVILEGES ON *.* TO 'bob'@'localhost' WITH GRANT OPTION",
         "GRANT USAGE ON *.* TO 'scott'@'localhost' REQUIRE SSL",

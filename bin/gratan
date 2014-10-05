@@ -44,8 +44,8 @@ ARGV.options do |opt|
     opt.on(''  , '--no-color')           {    options[:color]           = false         }
     opt.on(''  , '--debug')              {    options[:debug]           = true          }
 
-    opt.on(''  , '--auto-identify OUTPUT') {|v| options[:identifier] = Gratan::Identifier::Auto.new(v) }
-    opt.on(''  , '--csv-identify CSV')     {|v| options[:identifier] = Gratan::Identifier::CSV.new(v)  }
+    opt.on(''  , '--auto-identify OUTPUT') {|v| options[:identifier] = Gratan::Identifier::Auto.new(v, options) }
+    opt.on(''  , '--csv-identify CSV')     {|v| options[:identifier] = Gratan::Identifier::CSV.new(v, options)  }
 
     opt.on('-h', '--help') do
       puts opt.help

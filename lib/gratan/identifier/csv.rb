@@ -3,7 +3,8 @@ require 'csv'
 class Gratan::Identifier::CSV
   include Gratan::Logger::Helper
 
-  def initialize(path)
+  def initialize(path, options = {})
+    @options = options
     @passwords = {}
 
     CSV.foreach(path) do |row|
@@ -16,7 +17,7 @@ class Gratan::Identifier::CSV
     password = @passwords[user_host]
 
     unless password
-      log(:warn, 'password for `#{user_host}` can not be found', :yellow)
+      log(:warn, "password for `#{user_host}` can not be found", :yellow)
     end
 
     password
