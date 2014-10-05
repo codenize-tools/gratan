@@ -114,7 +114,7 @@ class Gratan::Driver
       count = 0
 
       if with_option =~ /\b#{name}\s+(\d+)\b/i
-        coount = $1
+        count = $1
       end
 
       options << [name, count].join(' ')
