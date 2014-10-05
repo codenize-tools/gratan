@@ -1,0 +1,101 @@
+#!/usr/bin/env ruby
+$: << File.expand_path("#{File.dirname __FILE__}/../lib")
+require 'rubygems'
+require 'gratan'
+require 'optparse'
+require 'json'
+
+Version = Gratan::VERSION
+DEFAULT_FILENAME = 'Grantfile'
+
+mode = nil
+file = DEFAULT_FILENAME
+output_file = '-'
+
+mysql_options = {
+  :host     => 'localhost',
+  :username => 'root',
+}
+
+options = {
+  :dry_run => false,
+  :color   => true,
+  :debug   => false,
+}
+
+ARGV.options do |opt|
+  begin
+    opt.on('', '--host HOST')          {|v| mysql_options[:host]     = v       }
+    opt.on('', '--port PORT', Integer) {|v| mysql_options[:port]     = v       }
+    opt.on('', '--socket SOCKET')      {|v| mysql_options[:socket]   = v       }
+    opt.on('', '--username USERNAME')  {|v| mysql_options[:username] = v       }
+    opt.on('', '--password PASSWORD')  {|v| mysql_options[:password] = v       }
+    opt.on('', '--database DATABASE')  {|v| mysql_options[:database] = v       }
+    opt.on('-a', '--apply')            {    mode                     = :apply  }
+    opt.on('-f', '--file FILE')        {|v| file                     = v       }
+    opt.on('',   '--dry-run')          {    options[:dry_run]        = true    }
+    opt.on('-e', '--export')           {    mode                     = :export }
+    opt.on('',   '--enable-expired')   {    options[:enable_expired] = true    }
+    opt.on('-o', '--output FILE')      {|v| output_file              = v       }
+    opt.on(''  , '--no-color')         {    options[:color]          = false   }
+    opt.on(''  , '--debug')            {    options[:debug]          = true    }
+
+    opt.on('-h', '--help') do
+      puts opt.help
+      exit 2
+    end
+
+    opt.parse!
+
+    unless mode
+      puts opt.help
+      exit 2
+    end
+  rescue => e
+    $stderr.puts("[ERROR] #{e.message}")
+    exit 1
+  end
+end
+
+options.update(mysql_options)
+String.colorize = options[:color]
+
+begin
+  logger = Gratan::Logger.instance
+  logger.set_debug(options[:debug])
+  client = Gratan::Client.new(options)
+
+  case mode
+  when :export
+    if output_file == '-'
+      logger.info('# Export Grants')
+      puts client.export(options)
+    else
+      logger.info("Export Grants to `#{output_file}`")
+      open(output_file, 'wb') {|f| f.puts client.export(options) }
+    end
+  when :apply
+    unless File.exist?(file)
+      raise "No Grantfile found (looking for: #{file})"
+    end
+
+    mysql_info = mysql_options.dup
+    mysql_info.delete(:password)
+    mysql_info = JSON.dump(mysql_info)
+
+    msg = "Apply `#{file}` to #{mysql_info}"
+    msg << ' (dry-run)' if options[:dry_run]
+    logger.info(msg)
+
+    updated = client.apply(file)
+
+    logger.info('No change'.intense_blue) unless updated
+  end
+rescue => e
+  if options[:debug]
+    raise e
+  else
+    $stderr.puts("[ERROR] #{e.message}".red)
+    exit 1
+  end
+end

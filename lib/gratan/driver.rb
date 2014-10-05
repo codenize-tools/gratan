@@ -151,7 +151,7 @@ class Gratan::Driver
   end
 
   def quote_object(object)
-    object.split('.', 2).map {|i| "`#{i}`" }.join('.')
+    object.split('.', 2).map {|i| i == '*' ? i : "`#{i}`" }.join('.')
   end
 
   def quote_identifier(identifier)

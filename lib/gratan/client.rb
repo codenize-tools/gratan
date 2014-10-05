@@ -13,7 +13,10 @@ class Gratan::Client
 
   def apply(file, options = {})
     options = @options.merge(options)
-    walk(file, options)
+
+    in_progress do
+      walk(file, options)
+    end
   end
 
   private
@@ -40,10 +43,12 @@ class Gratan::Client
   def create_user(user, host, attrs)
     # XXX: Add password proc
     @driver.create_user(user, host, attrs)
+    update!
   end
 
   def drop_user(user, host)
     @driver.drop_user(user, host)
+    update!
   end
 
   def walk_user(user, host, expected_attrs, actual_attrs)
@@ -62,12 +67,14 @@ class Gratan::Client
   def walk_identified(user, host, expected_identified, actual_identified)
     if expected_identified != actual_identified
       @driver.identify(user, host, expected_identified)
+      update!
     end
   end
 
   def walk_required(user, host, expected_required, actual_required)
     if expected_required != actual_required
       @driver.set_require(user, host, expected_required)
+      update!
     end
   end
 
@@ -80,12 +87,14 @@ class Gratan::Client
         walk_object(user, host, object, expected_options, actual_options)
       else
         @driver.grant(user, host, object, expected_options)
+        update!
       end
     end
 
     actual_objects.each do |object, options|
       options ||= {}
       @driver.revoke(user, host, object, options)
+      update!
     end
   end
 
@@ -100,6 +109,7 @@ class Gratan::Client
 
     if expected_with_option != actual_with_option
       @driver.update_with_option(user, host, object, expected_with_option)
+      update!
     end
   end
 
@@ -111,11 +121,17 @@ class Gratan::Client
     grant_privs = expected_privs - actual_privs
 
     unless revoke_privs.empty?
-      @driver.revoke(user, host, object, :privs => revoke_privs)
+      if revoke_privs.length == 1 and revoke_privs[0] == 'USAGE' and not grant_privs.empty?
+        # nothing to do
+      else
+        @driver.revoke(user, host, object, :privs => revoke_privs)
+        update!
+      end
     end
 
     unless grant_privs.empty?
       @driver.grant(user, host, object, :privs => grant_privs)
+      update!
     end
   end
 
@@ -129,7 +145,13 @@ class Gratan::Client
         priv[1] << ')'
       end
 
-      priv.join('(')
+      priv = priv.join('(')
+
+      if priv == 'ALL'
+        priv = 'ALL PRIVILEGES'
+      end
+
+      priv
     end
   end
 
@@ -143,5 +165,23 @@ class Gratan::Client
     else
       raise TypeError, "can't convert #{file} into File"
     end
+  end
+
+  def in_progress
+    updated = false
+
+    begin
+      @updated = false
+      yield
+      updated = @updated
+    ensure
+      @updated = nil
+    end
+
+    updated
+  end
+
+  def update!
+    @updated = true unless @options[:dry_run]
   end
 end
