@@ -31,27 +31,30 @@ class Gratan::DSL::Context
     end
   end
 
-  def user(name, host, options = {}, &block)
+  def user(name, host_or_array, options = {}, &block)
     name = name.to_s
-    host = host.to_s
-    options ||= {}
+    hosts = [host_or_array].flatten.map {|i| i.to_s }
 
-    __validate("User `#{name}@#{host}` is already defined") do
-      not @result.has_key?([name, host])
-    end
+    hosts.each do |host|
+      options ||= {}
 
-    if @options[:enable_expired] and (expired = options.delete(:expired))
-      expired = Time.parse(expired)
-
-      if Time.new >= expired
-        log(:warn, "User `#{name}@#{host}` has expired", :color => :yellow)
-        return
+      __validate("User `#{name}@#{host}` is already defined") do
+        not @result.has_key?([name, host])
       end
-    end
 
-    @result[[name, host]] = {
-      :objects => Gratan::DSL::Context::User.new(name, host, &block).result,
-      :options => options,
-    }
+      if @options[:enable_expired] and (expired = options.delete(:expired))
+        expired = Time.parse(expired)
+
+        if Time.new >= expired
+          log(:warn, "User `#{name}@#{host}` has expired", :color => :yellow)
+          return
+        end
+      end
+
+      @result[[name, host]] = {
+        :objects => Gratan::DSL::Context::User.new(name, host, &block).result,
+        :options => options,
+      }
+    end
   end
 end
