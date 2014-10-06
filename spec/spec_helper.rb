@@ -15,6 +15,7 @@ require 'tempfile'
 require 'timecop'
 
 IGNORE_USER = /\A(|root)\z/
+TEST_DATABASE = 'gratan_test'
 
 RSpec.configure do |config|
   config.before(:each) do
@@ -34,6 +35,31 @@ def mysql
   end
 
   retval
+end
+
+def create_database(client)
+  client.query("CREATE DATABASE #{TEST_DATABASE}")
+end
+
+def drop_database(client)
+  client.query("DROP DATABASE IF EXISTS #{TEST_DATABASE}")
+end
+
+def create_table(client, table)
+  client.query("CREATE TABLE #{TEST_DATABASE}.#{table} (id INT)")
+end
+
+def create_tables(*tables)
+  mysql do |client|
+    begin
+      drop_database(client)
+      create_database(client)
+      tables.each {|i| create_table(client, i) }
+      yield
+    ensure
+      drop_database(client)
+    end
+  end
 end
 
 def select_users(client)

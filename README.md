@@ -73,6 +73,11 @@ user "scott", "%" do
     grant "SELECT"
     grant "INSERT"
   end
+
+  on /^foo\.prefix_/ do
+    grant "SELECT"
+    grant "INSERT"
+  end
 end
 
 user "scott", "localhost", expired: '2014/10/10' do

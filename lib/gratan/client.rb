@@ -103,15 +103,17 @@ class Gratan::Client
   end
 
   def walk_objects(user, host, expected_objects, actual_objects)
-    expected_objects.each do |object, expected_options|
-      expected_options ||= {}
-      actual_options = actual_objects.delete(object)
+    expected_objects.each do |object_or_regexp, expected_options|
+      @driver.expand_object(object_or_regexp).each do |object|
+        expected_options ||= {}
+        actual_options = actual_objects.delete(object)
 
-      if actual_options
-        walk_object(user, host, object, expected_options, actual_options)
-      else
-        @driver.grant(user, host, object, expected_options)
-        update!
+        if actual_options
+          walk_object(user, host, object, expected_options, actual_options)
+        else
+          @driver.grant(user, host, object, expected_options)
+          update!
+        end
       end
     end
 
