@@ -80,7 +80,7 @@ user "scott", "%" do
   end
 end
 
-user "scott", "localhost", expired: '2014/10/10' do
+user "scott", ["localhost", "192.168.%"], expired: '2014/10/10' do
   on "*.*", with: 'GRANT OPTION' do
     grant "ALL PRIVILEGES"
   end
