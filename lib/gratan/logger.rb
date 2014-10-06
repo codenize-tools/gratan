@@ -17,11 +17,15 @@ class Gratan::Logger < ::Logger
 
   module Helper
     def log(level, message, options = {})
-      options = (@options || {}).merge(options)
+      global_options = @options || {}
       message = "[#{level.to_s.upcase}] #{message}" unless level == :info
-      message << ' (dry-run)' if options[:dry_run]
+
+      if global_options[:dry_run] and options[:dry_run] != false
+        message << ' (dry-run)' if global_options[:dry_run]
+      end
+
       message = message.send(options[:color]) if options[:color]
-      logger = options[:logger] || Gratan::Logger.instance
+      logger = global_options[:logger] || Gratan::Logger.instance
       logger.send(level, message)
     end
   end
