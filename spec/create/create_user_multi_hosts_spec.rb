@@ -1,5 +1,5 @@
 describe 'Gratan::Client#apply' do
-  context 'when create user (multi host)' do
+  context 'when create user (multi hosts)' do
     subject { client }
 
     it do
