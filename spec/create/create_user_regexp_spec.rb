@@ -37,4 +37,31 @@ end
       end
     end
   end
+
+  context 'when create user using regexp (no privileges)' do
+    let(:logger) do
+      logger = Logger.new('/dev/null')
+      expect(logger).to receive(:warn).with("[WARN] there was no privileges to grant to 'scott'@'localhost'")
+      logger
+    end
+
+    subject { client(logger: logger) }
+
+    it do
+      dsl = <<-RUBY
+user 'scott', 'localhost', identified: 'tiger' do
+  on /\\Agratan_test\\.x(foo|bar)\\z/ do
+    grant 'SELECT'
+    grant 'INSERT'
+  end
+end
+      RUBY
+
+      create_tables(:foo, :bar, :zoo, :baz) do
+        apply(subject) { dsl }
+
+        expect(show_grants).to match_array []
+      end
+    end
+  end
 end
