@@ -12,7 +12,7 @@ class Gratan::Client
 
     if block_given?
       exported.sort_by {|user_host, attrs|
-        user_host[0].empty? ? 'root' : user_host[0]
+        user_host[0].empty? ? 'root_' : user_host[0]
       }.chunk {|user_host, attrs|
         user_host[0].empty? ? 'root' : user_host[0]
       }.each {|user, grants|
