@@ -26,12 +26,36 @@ class Gratan::Driver
     query("SHOW TABLES FROM `#{database}`").map {|i| i.values.first }
   end
 
+  def show_all_tables
+    @all_tables ||= show_databases.map {|database|
+      show_tables(database).map do |table|
+        "#{database}.#{table}"
+      end
+    }.flatten
+  end
+
+  def expand_object(object_or_regexp)
+    if object_or_regexp.kind_of?(Regexp)
+      show_all_tables.select {|i| i =~ object_or_regexp }
+    else
+      [object_or_regexp]
+    end
+  end
+
   def create_user(user, host, options = {})
     objects = options[:objects]
     grant_options = options[:options]
+    granted = false
 
-    objects.each do |object, object_options|
-      grant(user, host, object, grant_options.merge(object_options))
+    objects.each do |object_or_regexp, object_options|
+      expand_object(object_or_regexp).each do |object|
+        grant(user, host, object, grant_options.merge(object_options))
+        granted = true
+      end
+    end
+
+    unless granted
+      log(:warn, "there was no privileges to grant to #{quote_user(user, host)}", :color => :yellow)
     end
   end
 
