@@ -195,6 +195,7 @@ class Gratan::Client
     updated = false
 
     begin
+      @driver.disable_log_bin_local
       @updated = false
       yield
       updated = @updated
