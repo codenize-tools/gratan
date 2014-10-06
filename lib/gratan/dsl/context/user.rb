@@ -12,7 +12,7 @@ class Gratan::DSL::Context::User
   end
 
   def on(name, options = {}, &block)
-    name = name.to_s
+    name = name.kind_of?(Regexp) ? name : name.to_s
 
     __validate("Object `#{name}` is already defined") do
       not @result.has_key?(name)

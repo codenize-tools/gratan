@@ -103,15 +103,23 @@ class Gratan::Client
   end
 
   def walk_objects(user, host, expected_objects, actual_objects)
-    expected_objects.each do |object, expected_options|
-      expected_options ||= {}
-      actual_options = actual_objects.delete(object)
-
-      if actual_options
-        walk_object(user, host, object, expected_options, actual_options)
+    expected_objects.each do |object_or_regexp, expected_options|
+      if object_or_regexp.kind_of?(Regexp)
+        objs = show_tables.select {|i| i =~ object_or_regexp }
       else
-        @driver.grant(user, host, object, expected_options)
-        update!
+        objs = [object_or_regexp]
+      end
+
+      objs.each do |object|
+        expected_options ||= {}
+        actual_options = actual_objects.delete(object)
+
+        if actual_options
+          walk_object(user, host, object, expected_options, actual_options)
+        else
+          @driver.grant(user, host, object, expected_options)
+          update!
+        end
       end
     end
 
@@ -208,5 +216,13 @@ class Gratan::Client
 
   def update!
     @updated = true unless @options[:dry_run]
+  end
+
+  def all_tables
+    @all_tables ||= @driver.show_databases.map {|database|
+      @driver.show_tables(database).map do |table|
+        "#{database}.#{table}"
+      end
+    }.flatten
   end
 end

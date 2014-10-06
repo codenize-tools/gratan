@@ -18,6 +18,14 @@ class Gratan::Driver
     end
   end
 
+  def show_databases
+    query("SHOW DATABASES").map {|i| i.values.first }
+  end
+
+  def show_tables(database)
+    query("SHOW TABLES FROM `#{database}`").map {|i| i.values.first }
+  end
+
   def create_user(user, host, options = {})
     objects = options[:objects]
     grant_options = options[:options]
