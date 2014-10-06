@@ -12,12 +12,12 @@ class Gratan::Client
 
     if block_given?
       exported.sort_by {|user_host, attrs|
-        user_host[0].empty? ? 'root_' : user_host[0]
+        user_host[0].empty? ? 'root' : user_host[0]
       }.chunk {|user_host, attrs|
         user_host[0].empty? ? 'root' : user_host[0]
       }.each {|user, grants|
         h = {}
-        grants.each {|k, v| h[k] = v }
+        grants.sort_by {|k, v| k }.each {|k, v| h[k] = v }
         dsl = Gratan::DSL.convert(h, options)
         yield(user, dsl)
       }
