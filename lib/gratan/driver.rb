@@ -132,7 +132,7 @@ class Gratan::Driver
   private
 
   def query(sql)
-    log(:debug, sql)
+    log(:debug, sql, :dry_run => false)
     @client.query(sql)
   end
 
