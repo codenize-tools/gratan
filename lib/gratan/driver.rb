@@ -7,13 +7,13 @@ class Gratan::Driver
   end
 
   def each_user
-    read('SELECT user, host FROM mysql.user').each do |row|
+    query('SELECT user, host FROM mysql.user').each do |row|
       yield(row['user'], row['host'])
     end
   end
 
   def show_grants(user, host)
-    read("SHOW GRANTS FOR #{quote_user(user, host)}").each do |row|
+    query("SHOW GRANTS FOR #{quote_user(user, host)}").each do |row|
       yield(row.values.first)
     end
   end
@@ -125,9 +125,13 @@ class Gratan::Driver
     end
   end
 
+  def disable_log_bin_local
+    query('SET SQL_LOG_BIN = 0')
+  end
+
   private
 
-  def read(sql)
+  def query(sql)
     log(:debug, sql)
     @client.query(sql)
   end
