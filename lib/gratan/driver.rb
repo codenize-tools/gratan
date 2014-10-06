@@ -137,12 +137,12 @@ class Gratan::Driver
   end
 
   def update(sql)
-    log(:info, sql, :green)
+    log(:info, sql, :color => :green)
     @client.query(sql) unless @options[:dry_run]
   end
 
   def delete(sql)
-    log(:info, sql, :red)
+    log(:info, sql, :color => :red)
     @client.query(sql) unless @options[:dry_run]
   end
 

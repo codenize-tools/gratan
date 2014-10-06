@@ -44,7 +44,7 @@ class Gratan::DSL::Context
       expired = Time.parse(expired)
 
       if Time.new >= expired
-        log(:warn, "User `#{name}@#{host}` has expired", :yellow)
+        log(:warn, "User `#{name}@#{host}` has expired", :color => :yellow)
         return
       end
     end

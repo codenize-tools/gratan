@@ -17,7 +17,7 @@ class Gratan::Identifier::CSV
     password = @passwords[user_host]
 
     unless password
-      log(:warn, "password for `#{user_host}` can not be found", :yellow)
+      log(:warn, "password for `#{user_host}` can not be found", :color => :yellow)
     end
 
     password
