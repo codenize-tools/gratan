@@ -201,14 +201,19 @@ class Gratan::Client
       @updated = false
       yield
       updated = @updated
+      @driver.flush_privileges if updated
     ensure
       @updated = nil
     end
 
-    updated
+    if @options[:dry_run]
+      false
+    else
+      updated
+    end
   end
 
   def update!
-    @updated = true unless @options[:dry_run]
+    @updated = true
   end
 end

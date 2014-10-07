@@ -42,6 +42,10 @@ class Gratan::Driver
     end
   end
 
+  def flush_privileges
+    update("FLUSH PRIVILEGES")
+  end
+
   def create_user(user, host, options = {})
     objects = options[:objects]
     grant_options = options[:options]
