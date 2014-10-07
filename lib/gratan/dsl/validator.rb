@@ -4,8 +4,8 @@ module Gratan::DSL::Validator
   end
 
   def __identify(errmsg)
-    if @error_identifier
-      errmsg = "#{@error_identifier}: #{errmsg}"
+    if @object_identifier
+      errmsg = "#{@object_identifier}: #{errmsg}"
     end
 
     return errmsg

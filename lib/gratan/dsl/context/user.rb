@@ -5,7 +5,7 @@ class Gratan::DSL::Context::User
   attr_reader :result
 
   def initialize(user, host, options, &block)
-    @error_identifier = "User `#{user}@#{host}`"
+    @object_identifier = "User `#{user}@#{host}`"
     @user = user
     @host = host
     @options = options
