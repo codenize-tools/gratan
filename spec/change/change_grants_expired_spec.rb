@@ -66,18 +66,7 @@ end
   end
 
   context 'when object has not expired' do
-    let(:logger) do
-      logger = Logger.new('/dev/null')
-      expect(logger).to receive(:warn).with('[WARN] User `scott@localhost`: Object `test.*` has expired')
-      logger
-    end
-
-    subject do
-      client(
-        enable_expired: true,
-        logger: logger
-      )
-    end
+    subject { client(enable_expired: true) }
 
     it do
       dsl = <<-RUBY
@@ -112,18 +101,7 @@ end
   end
 
   context 'when enable_expired is false' do
-    let(:logger) do
-      logger = Logger.new('/dev/null')
-      expect(logger).to receive(:warn).with('[WARN] User `scott@localhost`: Object `test.*` has expired')
-      logger
-    end
-
-    subject do
-      client(
-        enable_expired: false,
-        logger: logger
-      )
-    end
+    subject { client(enable_expired: false) }
 
     it do
       dsl = <<-RUBY
