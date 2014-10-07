@@ -69,7 +69,7 @@ user "scott", "%" do
     grant "USAGE"
   end
 
-  on "test.*" do
+  on "test.*", expired: '2014/10/08' do
     grant "SELECT"
     grant "INSERT"
   end
