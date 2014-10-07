@@ -52,7 +52,7 @@ class Gratan::DSL::Context
       end
 
       @result[[name, host]] = {
-        :objects => Gratan::DSL::Context::User.new(name, host, &block).result,
+        :objects => Gratan::DSL::Context::User.new(name, host, @options, &block).result,
         :options => options,
       }
     end

@@ -3,8 +3,12 @@ class Gratan::DSL::Context::On
 
   attr_reader :result
 
-  def initialize(user, host, object, &block)
+  def initialize(user, host, object, options, &block)
     @error_identifier = "User `#{user}@#{host}` on `#{object}`"
+    @user = user
+    @host = host
+    @object = object
+    @options = options
     @result = []
     instance_eval(&block)
   end
