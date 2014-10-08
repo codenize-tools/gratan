@@ -14,7 +14,7 @@ class Gratan::Exporter
     @driver.each_user do |user, host|
       next if user =~ @options[:ignore_user]
 
-      if options[:target_user]
+      if @options[:target_user]
         next unless user =~ @options[:target_user]
       end
 
