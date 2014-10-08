@@ -52,6 +52,7 @@ Usage: gratan [options]
         --split
     -o, --output FILE
         --ignore-user REGEXP
+        --target-user REGEXP
         --no-color
         --debug
         --auto-identify OUTPUT
