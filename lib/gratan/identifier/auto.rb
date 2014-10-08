@@ -2,7 +2,7 @@ class Gratan::Identifier::Auto
   def initialize(output, options = {})
     @options = options
 
-    unless @options[:dry_dun]
+    unless @options[:dry_run]
       if output == '-'
         @output = $stdout
       else
