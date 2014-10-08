@@ -84,8 +84,7 @@ end
     subject { client(target_user: /mary/) }
 
     it do
-      apply(subject) {
-        <<-RUBY
+      dsl = <<-RUBY
 user 'scott', 'localhost', required: 'SSL' do
   on '*.*' do
     grant 'SELECT'
@@ -116,8 +115,10 @@ user 'bob', 'localhost' do
     grant 'SELECT'
   end
 end
-        RUBY
-      }
+      RUBY
+
+      result = apply(subject) { dsl }
+      expect(result).to be_falsey
 
       expect(show_grants).to match_array [
         "GRANT SELECT (user) ON `mysql`.`user` TO 'scott'@'localhost'",
