@@ -48,11 +48,11 @@ Usage: gratan [options]
         --dry-run
     -e, --export
         --with-identifier
-        --enable-expired
         --split
     -o, --output FILE
         --ignore-user REGEXP
         --target-user REGEXP
+        --enable-expired
         --no-color
         --debug
         --auto-identify OUTPUT
