@@ -18,6 +18,7 @@ class Gratan::Identifier::Auto
       password = @cache[user]
     else
       password = mkpasswd
+      @cache[user] = password
     end
 
     puts_password(user, host, password)
