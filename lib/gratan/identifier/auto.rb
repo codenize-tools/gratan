@@ -9,10 +9,17 @@ class Gratan::Identifier::Auto
         @output = open(output, 'w')
       end
     end
+
+    @cache = {}
   end
 
   def identify(user, host)
-    password = mkpasswd
+    if @cache[user]
+      password = @cache[user]
+    else
+      password = mkpasswd
+    end
+
     puts_password(user, host, password)
     password
   end
