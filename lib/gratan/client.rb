@@ -43,6 +43,11 @@ class Gratan::Client
 
     expected.each do |user_host, expected_attrs|
       next if user_host[0] =~ options[:ignore_user]
+
+      if options[:target_user]
+        next unless user_host[0] =~ options[:target_user]
+      end
+
       actual_attrs = actual.delete(user_host)
 
       if actual_attrs
@@ -54,6 +59,11 @@ class Gratan::Client
 
     actual.each do |user_host, attrs|
       next if user_host[0] =~ options[:ignore_user]
+
+      if options[:target_user]
+        next unless user_host[0] =~ options[:target_user]
+      end
+
       drop_user(*user_host)
     end
   end
