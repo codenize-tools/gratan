@@ -2,10 +2,12 @@ class Gratan::Identifier::Auto
   def initialize(output, options = {})
     @options = options
 
-    if output == '-'
-      @output = $stdout
-    else
-      @output = open(output, 'w')
+    unless @options[:dry_dun]
+      if output == '-'
+        @output = $stdout
+      else
+        @output = open(output, 'w')
+      end
     end
   end
 
@@ -22,7 +24,7 @@ class Gratan::Identifier::Auto
   end
 
   def puts_password(user, host, password)
-    @output.puts("#{user}@#{host},#{password}")
+    @output.puts("#{user}@#{host},#{password}") if @output
     @output.flush
   end
 end
