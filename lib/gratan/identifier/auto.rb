@@ -24,7 +24,9 @@ class Gratan::Identifier::Auto
   end
 
   def puts_password(user, host, password)
-    @output.puts("#{user}@#{host},#{password}") if @output
-    @output.flush
+    if @output
+      @output.puts("#{user}@#{host},#{password}")
+      @output.flush
+    end
   end
 end
