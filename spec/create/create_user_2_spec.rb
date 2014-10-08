@@ -36,6 +36,40 @@ end
     end
   end
 
+  context 'when create user with auto identify (dry-run)' do
+    let(:auto_identifier) do
+      identifier = Gratan::Identifier::Auto.new('/dev/null')
+      allow(identifier).to receive(:mkpasswd) { 'foobarzoo' }
+      identifier
+    end
+
+    subject { client(identifier: auto_identifier, dry_run: true) }
+
+    it do
+      apply(subject) {
+        <<-RUBY
+user 'scott', 'localhost' do
+  on '*.*' do
+    grant 'SELECT'
+    grant 'INSERT'
+    grant 'UPDATE'
+    grant 'DELETE'
+  end
+
+  on 'test.*' do
+    grant 'SELECT'
+    grant 'INSERT'
+    grant 'UPDATE'
+    grant 'DELETE'
+  end
+end
+        RUBY
+      }
+
+      expect(show_grants).to match_array []
+    end
+  end
+
   context 'when create user with csv identify' do
     let(:csv_identifier) do
       identifier = nil
