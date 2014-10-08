@@ -37,11 +37,11 @@ ARGV.options do |opt|
     opt.on(''  , '--dry-run')              {    options[:dry_run]         = true          }
     opt.on('-e', '--export')               {    mode                      = :export       }
     opt.on(''  , '--with-identifier')      {    options[:with_identifier] = true          }
-    opt.on(''  , '--enable-expired')       {    options[:enable_expired]  = true          }
     opt.on(''  , '--split')                {    split                     = true          }
     opt.on('-o', '--output FILE')          {|v| output_file               = v             }
     opt.on(''  , '--ignore-user REGEXP')   {|v| options[:ignore_user]     = Regexp.new(v) }
     opt.on(''  , '--target-user REGEXP')   {|v| options[:target_user]     = Regexp.new(v) }
+    opt.on(''  , '--enable-expired')       {    options[:enable_expired]  = true          }
     opt.on(''  , '--no-color')             {    options[:color]           = false         }
     opt.on(''  , '--debug')                {    options[:debug]           = true          }
     opt.on(''  , '--auto-identify OUTPUT') {|v| options[:identifier] = Gratan::Identifier::Auto.new(v, options) }
