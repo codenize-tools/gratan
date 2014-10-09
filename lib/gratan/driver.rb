@@ -1,6 +1,8 @@
 class Gratan::Driver
   include Gratan::Logger::Helper
 
+  ER_NO_SUCH_TABLE = 1146
+
   def initialize(client, options = {})
     @client = client
     @options = options
@@ -84,7 +86,15 @@ class Gratan::Driver
     sql << " REQUIRE #{required}" if required
     sql << " WITH #{with_option}" if with_option
 
-    update(sql)
+    begin
+      update(sql)
+    rescue Mysql2::Error => e
+      if @options[:ignore_not_exist] and e.error_number == ER_NO_SUCH_TABLE
+        log(:warn, e.message, :color => :yellow)
+      else
+        raise e
+      end
+    end
   end
 
   def identify(user, host, identifier)
