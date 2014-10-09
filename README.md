@@ -53,6 +53,7 @@ Usage: gratan [options]
         --ignore-user REGEXP
         --target-user REGEXP
         --enable-expired
+        --ignore-not-exist
         --no-color
         --debug
         --auto-identify OUTPUT
