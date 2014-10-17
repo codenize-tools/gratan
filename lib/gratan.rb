@@ -1,8 +1,10 @@
 require 'logger'
-require 'mysql2'
 require 'singleton'
-require 'term/ansicolor'
 require 'time'
+
+require 'deep_merge'
+require 'mysql2'
+require 'term/ansicolor'
 
 module Gratan; end
 require 'gratan/logger'

@@ -10,6 +10,10 @@ class Gratan::Client
     options = @options.merge(options)
     exported = Gratan::Exporter.export(@driver, options)
 
+    if options[:chunk_by_user]
+      exported = chunk_by_user(exported)
+    end
+
     if block_given?
       exported.sort_by {|user_host, attrs|
         user_host[0].empty? ? 'root' : user_host[0]
@@ -24,6 +28,29 @@ class Gratan::Client
     else
       Gratan::DSL.convert(exported, options)
     end
+  end
+
+  def chunk_by_user(exported)
+    chunked = {}
+
+    exported.sort_by {|user_host, attrs|
+      user_host[0]
+    }.chunk {|user_host, attrs|
+      user_host[0]
+    }.each {|user, grants|
+      merged_attrs = {}
+      hosts = []
+
+      grants.each do |user_host, attrs|
+        hosts << user_host[1]
+        merged_attrs.deep_merge!(attrs)
+      end
+
+      user_host = [user, hosts.sort]
+      chunked[user_host] = merged_attrs
+    }
+
+    chunked
   end
 
   def apply(file, options = {})
