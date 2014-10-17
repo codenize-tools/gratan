@@ -22,7 +22,6 @@ class Gratan::Client
         yield(user, dsl)
       }
     else
-      exported = Gratan::Exporter.export(@driver, options)
       Gratan::DSL.convert(exported, options)
     end
   end
