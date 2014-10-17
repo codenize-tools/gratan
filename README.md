@@ -49,6 +49,7 @@ Usage: gratan [options]
     -e, --export
         --with-identifier
         --split
+        --chunk-by-user
     -o, --output FILE
         --ignore-user REGEXP
         --target-user REGEXP
