@@ -2,11 +2,6 @@ class Gratan::Identifier::Auto
   def initialize(output, options = {})
     @output = output
     @options = options
-
-    unless @options[:dry_run]
-      @output = output
-    end
-
     @cache = {}
   end
 
