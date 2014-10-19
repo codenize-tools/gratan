@@ -4,11 +4,7 @@ class Gratan::Identifier::Auto
     @options = options
 
     unless @options[:dry_run]
-      if output == '-'
-        @output = $stdout
-      else
-        @output = output
-      end
+      @output = output
     end
 
     @cache = {}
