@@ -97,7 +97,7 @@ class Gratan::Client
   def create_user(user, host, attrs)
     attrs[:options] ||= {}
 
-    unless attrs.has_key?(:identified)
+    unless attrs[:options].has_key?(:identified)
       identified = @options[:identifier].identify(user, host)
       attrs[:options][:identified] = identified if identified
     end
