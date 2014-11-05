@@ -38,7 +38,7 @@ end
   end
 
   def output_objects(objects)
-    objects.map {|object, grant|
+    objects.sort_by {|k, v| k }.map {|object, grant|
       options = output_object_options(grant)
 
       <<-EOS
@@ -61,7 +61,7 @@ end
   end
 
   def output_grant(grant)
-    grant[:privs].map {|priv|
+    grant[:privs].sort.map {|priv|
       <<-EOS
     grant #{priv.inspect}
       EOS
