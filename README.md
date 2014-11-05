@@ -53,6 +53,7 @@ Usage: gratan [options]
     -o, --output FILE
         --ignore-user REGEXP
         --target-user REGEXP
+        --ignore-object REGEXP
         --enable-expired
         --ignore-not-exist
         --no-color
