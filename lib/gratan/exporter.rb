@@ -36,7 +36,7 @@ class Gratan::Exporter
       host = grant.delete(:host)
       user_host = [user, host]
       object = grant.delete(:object)
-      next if user =~ @options[:ignore_object]
+      next if object =~ @options[:ignore_object]
       identified = grant.delete(:identified)
       required = grant.delete(:require)
 
