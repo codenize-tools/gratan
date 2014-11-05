@@ -38,9 +38,13 @@ class Gratan::Driver
 
   def expand_object(object_or_regexp)
     if object_or_regexp.kind_of?(Regexp)
-      show_all_tables.select {|i| i =~ object_or_regexp }
+      objects = show_all_tables.select {|i| i =~ object_or_regexp }
     else
-      [object_or_regexp]
+      objects = [object_or_regexp]
+    end
+
+    objects.select do |object|
+      object !~ @options[:ignore_object]
     end
   end
 

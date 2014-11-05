@@ -42,6 +42,7 @@ ARGV.options do |opt|
     opt.on('-o', '--output FILE')          {|v| output_file                = v             }
     opt.on(''  , '--ignore-user REGEXP')   {|v| options[:ignore_user]      = Regexp.new(v) }
     opt.on(''  , '--target-user REGEXP')   {|v| options[:target_user]      = Regexp.new(v) }
+    opt.on(''  , '--ignore-object REGEXP') {|v| options[:ignore_object]    = Regexp.new(v) }
     opt.on(''  , '--enable-expired')       {    options[:enable_expired]   = true          }
     opt.on(''  , '--ignore-not-exist')     {|v| options[:ignore_not_exist] = true          }
     opt.on(''  , '--no-color')             {    options[:color]            = false         }

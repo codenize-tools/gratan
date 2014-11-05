@@ -47,13 +47,13 @@ user "scott", ["%", "localhost"] do
     grant "SELECT"
   end
 
-  on "test3.*" do
-    grant "UPDATE"
-    grant "DELETE"
-  end
-
   on "test2.*" do
     grant "INSERT"
+  end
+
+  on "test3.*" do
+    grant "DELETE"
+    grant "UPDATE"
   end
 end
       RUBY
