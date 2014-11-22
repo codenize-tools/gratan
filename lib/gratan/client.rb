@@ -76,21 +76,25 @@ class Gratan::Client
 
       actual_attrs = actual.delete(user_host)
 
-      if actual_attrs
+      if expected_attrs == :dropped
+        drop_user(*user_host) if actual_attrs
+      elsif actual_attrs
         walk_user(*user_host, expected_attrs, actual_attrs)
       else
         create_user(*user_host, expected_attrs)
       end
     end
 
-    actual.each do |user_host, attrs|
-      next if user_host[0] =~ options[:ignore_user]
+    unless options[:ignore_unlisted_users]
+      actual.each do |user_host, attrs|
+        next if user_host[0] =~ options[:ignore_user]
 
-      if options[:target_user]
-        next unless user_host[0] =~ options[:target_user]
+        if options[:target_user]
+          next unless user_host[0] =~ options[:target_user]
+        end
+
+        drop_user(*user_host)
       end
-
-      drop_user(*user_host)
     end
   end
 

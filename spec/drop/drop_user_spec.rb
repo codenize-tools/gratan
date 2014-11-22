@@ -27,6 +27,12 @@ user 'bob', 'localhost' do
     grant 'ALL PRIVILEGES'
   end
 end
+
+user 'jimbob', 'localhost' do
+  on '*.*' do
+    grant 'USAGE'
+  end
+end
       RUBY
     }
   end
@@ -46,6 +52,8 @@ user 'bob', 'localhost' do
     grant 'ALL PRIVILEGES'
   end
 end
+
+user 'jimbob', 'localhost', dropped: true
         RUBY
       }
 
