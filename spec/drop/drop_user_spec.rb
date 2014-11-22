@@ -28,7 +28,7 @@ user 'bob', 'localhost' do
   end
 end
 
-user 'jimbob', 'localhost' do
+user 'jimbob', ['localhost', 'bomb.com'] do
   on '*.*' do
     grant 'USAGE'
   end
@@ -53,7 +53,7 @@ user 'bob', 'localhost' do
   end
 end
 
-user 'jimbob', 'localhost', dropped: true
+user 'jimbob', ['localhost', 'bomb.com'], dropped: true
         RUBY
       }
 

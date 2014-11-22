@@ -35,6 +35,11 @@ class Gratan::DSL::Context
     name = name.to_s
     hosts = [host_or_array].flatten.map {|i| i.to_s }
 
+    expired = options.delete(:expired)
+    expired = Time.parse(expired) if expired
+
+    dropped = options.delete(:dropped)
+
     hosts.each do |host|
       options ||= {}
 
@@ -42,9 +47,7 @@ class Gratan::DSL::Context
         not @result.has_key?([name, host])
       end
 
-      if @options[:enable_expired] and (expired = options.delete(:expired))
-        expired = Time.parse(expired)
-
+      if @options[:enable_expired] and expired
         if Time.new >= expired
           log(:warn, "User `#{name}@#{host}` has expired", :color => :yellow)
           @result[[name, host]] = :dropped
@@ -52,7 +55,7 @@ class Gratan::DSL::Context
         end
       end
 
-      if options.delete(:dropped)
+      if dropped
         @result[[name, host]] = :dropped
         next
       end
