@@ -56,15 +56,22 @@ class Gratan::Client
   def apply(file, options = {})
     options = @options.merge(options)
 
+    apply_context(
+      load_file(file, options),
+      options)
+  end
+
+  def apply_context(expected, options = {})
+    options = @options.merge(options)
+
     in_progress do
-      walk(file, options)
+      walk(expected, options)
     end
   end
 
   private
 
-  def walk(file, options)
-    expected = load_file(file, options)
+  def walk(expected, options)
     actual = Gratan::Exporter.export(@driver, options.merge(:with_identifier => true))
 
     expected.each do |user_host, expected_attrs|

@@ -17,8 +17,6 @@ class Gratan::DSL::Context
     instance_eval(&block)
   end
 
-  private
-
   def require(file)
     grantfile = (file =~ %r|\A/|) ? file : File.expand_path(File.join(File.dirname(@path), file))
 
