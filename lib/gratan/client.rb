@@ -1,4 +1,6 @@
 class Gratan::Client
+  attr_reader :driver
+
   def initialize(options = {})
     @options = options
     @options[:identifier] ||= Gratan::Identifier::Null.new
