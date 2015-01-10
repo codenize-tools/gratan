@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['sgwr_dts@yahoo.co.jp']
   spec.summary       = %q{Gratan is a tool to manage MySQL permissions using Ruby DSL.}
   spec.description   = %q{Gratan is a tool to manage MySQL permissions using Ruby DSL.}
-  spec.homepage      = 'https://github.com/winebarrel/gratan'
+  spec.homepage      = 'http://gratan.codenize.tools/'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
