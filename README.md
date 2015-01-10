@@ -91,6 +91,9 @@ user "scott", ["localhost", "192.168.%"], expired: '2014/10/10' do
 end
 ```
 
+## Similar tools
+* [Codenize.tools](http://http://codenize.tools/)
+
 ## What does "Gratan" mean?
 
 [![](http://i.gyazo.com/c37d934ba0a61f760603ce4c56401e60.png)](https://www.google.com/search?q=gratin&tbm=isch)
