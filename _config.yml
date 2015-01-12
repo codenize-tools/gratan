@@ -1,0 +1,14 @@
+# Site settings
+title: Gratan
+email: sgwr_dts@yahoo.co.jp
+description: "Gratan is a tool to manage MySQL permissions. It defines the state of MySQL permissions using Ruby DSL, and updates permissions according to DSL."
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://gratan.codenize.tools/"
+github_url: "https://github.com/winebarrel/gratan"
+twitter_username: sgwr_dts
+github_username:  winebarrel
+original_background_image_url: "https://www.flickr.com/photos/spilt-milk/16182535151/in/photolist-eydJkJ-8R9Ryo-617a9i-pbXvA1-72gmJT-74gF3x-5Huhu-5ScMAV-8R9Rvs-bAjwXa-zvnKh-bdTYHH-812kCd-7BTTF-dP5dfL-mVFLC-7BTTG-3sjngv-9Rzhi1-3sjnhv-6nkXMV-bRyENM-brqpdP-qDZHUK-dLRWDe-7NZzzM-bRyENF-5nWGyx-8pUjrX-4FsxcA-oHmKW-hVj8T8-8pUoYp-8pXuiQ-6jq2Cc-e52fqC-7e3xYP-94vWrg-4h77P8-9RjLwV-773ysd-773z6C-aHyBS-7M5mDz-8FeSmF-8pXuf1-8pUjok-8DNNPg-8UZXot-6oEjj3"
+background_image_licence: "images/background.license"
+
+# Build settings
+markdown: kramdown
