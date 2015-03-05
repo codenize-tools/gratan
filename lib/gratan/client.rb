@@ -102,6 +102,7 @@ class Gratan::Client
 
       if identified
         attrs = attrs.dup
+        attrs[:options] = attrs[:options].dup
         attrs[:options][:identified] = identified
       end
     end
