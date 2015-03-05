@@ -1,3 +1,3 @@
 module Gratan
-  VERSION = '0.2.8.beta'
+  VERSION = '0.2.8.beta2'
 end
