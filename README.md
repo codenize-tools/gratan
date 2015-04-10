@@ -73,7 +73,7 @@ user "scott", "%" do
     grant "USAGE"
   end
 
-  on "test.*", expired: '2014/10/08' do
+  on "test.*", expired: '2014/10/08', identified: "PASSWORD '*ABCDEF'" do
     grant "SELECT"
     grant "INSERT"
   end
