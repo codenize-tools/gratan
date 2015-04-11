@@ -1,4 +1,6 @@
 class Gratan::Client
+  attr_reader :driver
+
   def initialize(options = {})
     @options = options
     @options[:identifier] ||= Gratan::Identifier::Null.new
@@ -56,15 +58,22 @@ class Gratan::Client
   def apply(file, options = {})
     options = @options.merge(options)
 
+    apply_context(
+      load_file(file, options),
+      options)
+  end
+
+  def apply_context(expected, options = {})
+    options = @options.merge(options)
+
     in_progress do
-      walk(file, options)
+      walk(expected, options)
     end
   end
 
   private
 
-  def walk(file, options)
-    expected = load_file(file, options)
+  def walk(expected, options)
     actual = Gratan::Exporter.export(@driver, options.merge(:with_identifier => true))
 
     expected.each do |user_host, expected_attrs|
@@ -76,21 +85,25 @@ class Gratan::Client
 
       actual_attrs = actual.delete(user_host)
 
-      if actual_attrs
+      if expected_attrs == :dropped
+        drop_user(*user_host) if actual_attrs
+      elsif actual_attrs
         walk_user(*user_host, expected_attrs, actual_attrs)
       else
         create_user(*user_host, expected_attrs)
       end
     end
 
-    actual.each do |user_host, attrs|
-      next if user_host[0] =~ options[:ignore_user]
+    unless options[:ignore_unlisted_users]
+      actual.each do |user_host, attrs|
+        next if user_host[0] =~ options[:ignore_user]
 
-      if options[:target_user]
-        next unless user_host[0] =~ options[:target_user]
+        if options[:target_user]
+          next unless user_host[0] =~ options[:target_user]
+        end
+
+        drop_user(*user_host)
       end
-
-      drop_user(*user_host)
     end
   end
 

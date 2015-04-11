@@ -17,8 +17,6 @@ class Gratan::DSL::Context
     instance_eval(&block)
   end
 
-  private
-
   def require(file)
     grantfile = (file =~ %r|\A/|) ? file : File.expand_path(File.join(File.dirname(@path), file))
 
@@ -35,6 +33,11 @@ class Gratan::DSL::Context
     name = name.to_s
     hosts = [host_or_array].flatten.map {|i| i.to_s }
 
+    expired = options.delete(:expired)
+    expired = Time.parse(expired) if expired
+
+    dropped = options.delete(:dropped)
+
     hosts.each do |host|
       options ||= {}
 
@@ -42,13 +45,17 @@ class Gratan::DSL::Context
         not @result.has_key?([name, host])
       end
 
-      if @options[:enable_expired] and (expired = options.delete(:expired))
-        expired = Time.parse(expired)
-
+      if @options[:enable_expired] and expired
         if Time.new >= expired
           log(:warn, "User `#{name}@#{host}` has expired", :color => :yellow)
-          return
+          @result[[name, host]] = :dropped
+          next
         end
+      end
+
+      if dropped
+        @result[[name, host]] = :dropped
+        next
       end
 
       @result[[name, host]] = {
