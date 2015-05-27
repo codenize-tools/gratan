@@ -56,6 +56,7 @@ Usage: gratan [options]
         --ignore-object REGEXP
         --enable-expired
         --ignore-not-exist
+        --skip-disable-log-bin
         --no-color
         --debug
         --auto-identify OUTPUT
