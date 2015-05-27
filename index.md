@@ -4,7 +4,7 @@ layout: default
 
 [![Gem Version](https://badge.fury.io/rb/gratan.svg)](http://badge.fury.io/rb/gratan)
 [![Build Status](https://travis-ci.org/winebarrel/gratan.svg?branch=master)](https://travis-ci.org/winebarrel/gratan)
-[![Coverage Status](https://img.shields.io/coveralls/winebarrel/gratan.svg)](https://coveralls.io/r/winebarrel/gratan?branch=master)
+[![Coverage Status](https://coveralls.io/repos/winebarrel/gratan/badge.svg?branch=master)](https://coveralls.io/r/winebarrel/gratan?branch=master)
 
 ## Installation
 
@@ -55,6 +55,7 @@ Usage: gratan [options]
         --ignore-object REGEXP
         --enable-expired
         --ignore-not-exist
+        --skip-disable-log-bin
         --no-color
         --debug
         --auto-identify OUTPUT
