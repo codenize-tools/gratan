@@ -49,12 +49,46 @@ def create_table(client, table)
   client.query("CREATE TABLE #{TEST_DATABASE}.#{table} (id INT)")
 end
 
+def create_function(client, func)
+  client.query("CREATE FUNCTION #{TEST_DATABASE}.#{func}() RETURNS INT RETURN 1")
+end
+
+def create_procedure(client, prcd)
+  client.query("CREATE PROCEDURE #{TEST_DATABASE}.#{prcd}() SELECT 1")
+end
+
 def create_tables(*tables)
   mysql do |client|
     begin
       drop_database(client)
       create_database(client)
       tables.each {|i| create_table(client, i) }
+      yield
+    ensure
+      drop_database(client)
+    end
+  end
+end
+
+def create_functions(*funcs)
+  mysql do |client|
+    begin
+      drop_database(client)
+      create_database(client)
+      funcs.each {|i| create_function(client, i) }
+      yield
+    ensure
+      drop_database(client)
+    end
+  end
+end
+
+def create_procedures(*prcds)
+  mysql do |client|
+    begin
+      drop_database(client)
+      create_database(client)
+      prcds.each {|i| create_procedure(client, i) }
       yield
     ensure
       drop_database(client)
