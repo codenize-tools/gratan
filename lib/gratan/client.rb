@@ -99,7 +99,12 @@ class Gratan::Client
 
     unless attrs[:options].has_key?(:identified)
       identified = @options[:identifier].identify(user, host)
-      attrs[:options][:identified] = identified if identified
+
+      if identified
+        attrs = attrs.dup
+        attrs[:options] = attrs[:options].dup
+        attrs[:options][:identified] = identified
+      end
     end
 
     @driver.create_user(user, host, attrs)

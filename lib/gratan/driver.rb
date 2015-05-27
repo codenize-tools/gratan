@@ -176,7 +176,9 @@ class Gratan::Driver
   end
 
   def disable_log_bin_local
-    query('SET SQL_LOG_BIN = 0')
+    unless @options[:skip_disable_log_bin]
+      query('SET SQL_LOG_BIN = 0')
+    end
   end
 
   private
