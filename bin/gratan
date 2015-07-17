@@ -12,6 +12,10 @@ mode = nil
 file = DEFAULT_FILENAME
 output_file = '-'
 split = false
+MAGIC_COMMENT = <<-EOS
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+EOS
 
 mysql_options = {
   :host     => 'localhost',
@@ -89,6 +93,7 @@ begin
         logger.info("  write `#{grant_file}`")
 
         open(grant_file, 'wb') do |f|
+          f.puts MAGIC_COMMENT
           f.puts dsl
         end
       end
@@ -96,6 +101,8 @@ begin
       logger.info("  write `#{output_file}`")
 
       open(output_file, 'wb') do |f|
+        f.puts MAGIC_COMMENT
+
         requires.each do |grant_file|
           f.puts "require '#{File.basename grant_file}'"
         end
@@ -106,7 +113,10 @@ begin
         puts client.export(options)
       else
         logger.info("Export Grants to `#{output_file}`")
-        open(output_file, 'wb') {|f| f.puts client.export(options) }
+        open(output_file, 'wb') do |f|
+          f.puts MAGIC_COMMENT
+          f.puts client.export(options)
+        end
       end
     end
   when :apply
