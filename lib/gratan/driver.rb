@@ -26,6 +26,11 @@ class Gratan::Driver
 
   def show_tables(database)
     query("SHOW TABLES FROM `#{database}`").map {|i| i.values.first }
+  rescue Mysql2::Error => e
+    raise e if e.error_number != 1102
+
+    log(:debug, e.message)
+    []
   end
 
   def show_all_tables
