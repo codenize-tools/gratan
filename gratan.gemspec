@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mysql2'
   spec.add_dependency 'term-ansicolor'
   spec.add_dependency 'deep_merge'
+  spec.add_dependency 'diffy'
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '>= 3.0.0'
