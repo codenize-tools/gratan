@@ -9,6 +9,7 @@ require 'term/ansicolor'
 require 'diffy'
 
 module Gratan; end
+require 'gratan/utils'
 require 'gratan/logger'
 require 'gratan/client'
 require 'gratan/driver'
