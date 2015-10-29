@@ -61,6 +61,7 @@ Usage: gratan [options]
         --debug
         --auto-identify OUTPUT
         --csv-identify CSV
+        --mysql2-options JSON
     -h, --help
 ```
 
