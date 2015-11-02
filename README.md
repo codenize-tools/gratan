@@ -8,6 +8,11 @@ It defines the state of MySQL permissions using Ruby DSL, and updates permission
 [![Build Status](https://travis-ci.org/winebarrel/gratan.svg?branch=master)](https://travis-ci.org/winebarrel/gratan)
 [![Coverage Status](https://coveralls.io/repos/winebarrel/gratan/badge.svg?branch=master)](https://coveralls.io/r/winebarrel/gratan?branch=master)
 
+## Notice
+
+* `>= 0.3.0`
+  * Support template
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -89,6 +94,33 @@ end
 user "scott", ["localhost", "192.168.%"], expired: '2014/10/10' do
   on "*.*", with: 'GRANT OPTION' do
     grant "ALL PRIVILEGES"
+  end
+end
+```
+
+### Use template
+
+```ruby
+template 'all db template' do
+  on '*.*' do
+    grant 'SELECT'
+  end
+end
+
+template 'test db template' do
+  grant context.default
+
+  context.extra.each do |priv|
+    grant priv
+  end
+end
+
+user 'scott', 'localhost', identified: 'tiger' do
+  include_template 'all db template'
+
+  on 'test.*' do
+    context.default = 'SELECT'
+    include_template 'test db template', extra: ['INSERT', 'UPDATE']
   end
 end
 ```
