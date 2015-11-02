@@ -1,6 +1,7 @@
 class Gratan::DSL::Context
   include Gratan::DSL::Validator
   include Gratan::Logger::Helper
+  include Gratan::TemplateHelper
 
   def self.eval(dsl, path, options = {})
     self.new(path, options) do

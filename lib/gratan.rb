@@ -5,9 +5,11 @@ require 'time'
 require 'deep_merge'
 require 'mysql2'
 require 'term/ansicolor'
+require 'hashie'
 
 module Gratan; end
 require 'gratan/logger'
+require 'gratan/template_helper'
 require 'gratan/client'
 require 'gratan/driver'
 require 'gratan/dsl'
