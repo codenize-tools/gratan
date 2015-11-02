@@ -1,7 +1,22 @@
-sudo: false
+sudo: true
 language: ruby
 rvm:
   - 2.0.0
 script:
   - bundle install
   - bundle exec rake
+env:
+- MYSQL_VERSION=5.6.27
+install:
+  - "sudo apt-get -y remove mysql-common mysql-server-5.5 mysql-server-core-5.5 mysql-client-5.5 mysql-client-core-5.5"
+  - "sudo apt-get -y autoremove"
+  - "sudo apt-get -y install libaio1"
+  - "wget -O mysql-$MYSQL_VERSION.deb http://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-$MYSQL_VERSION-debian6.0-x86_64.deb/from/http://cdn.mysql.com/"
+  - "sudo dpkg -i mysql-$MYSQL_VERSION.deb"
+  - "sudo cp -f /opt/mysql/server-5.6/support-files/mysql.server /etc/init.d/mysql.server"
+  - "sudo ln -sf /opt/mysql/server-5.6/bin/* /usr/bin/"
+  - "sudo sed -i'' 's/table_cache/table_open_cache/' /etc/mysql/my.cnf"
+  - "sudo sed -i'' 's/log_slow_queries/slow_query_log/' /etc/mysql/my.cnf"
+  - "sudo sed -i'' 's/basedir[^=]\\+=.*$/basedir = \\/opt\\/mysql\\/server-5.6/' /etc/mysql/my.cnf"
+  - "sudo sed -i'' 's/^socket *=.*$/socket = \\/tmp\\/mysql.sock/' /etc/mysql/my.cnf"
+  - "sudo /etc/init.d/mysql.server start"
