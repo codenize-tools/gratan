@@ -1,5 +1,6 @@
 class Gratan::DSL::Context::On
   include Gratan::DSL::Validator
+  include Gratan::TemplateHelper
 
   attr_reader :result
 
