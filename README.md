@@ -12,6 +12,8 @@ It defines the state of MySQL permissions using Ruby DSL, and updates permission
 
 * `>= 0.3.0`
   * Support template
+* `>= 0.3.1`
+  * Fix `<secret>` password
 
 ## Installation
 
@@ -61,6 +63,7 @@ Usage: gratan [options]
         --ignore-object REGEXP
         --enable-expired
         --ignore-not-exist
+        --ignore-password-secret
         --skip-disable-log-bin
         --no-color
         --debug
