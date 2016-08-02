@@ -1,6 +1,7 @@
 class Gratan::DSL::Context
   include Gratan::DSL::Validator
   include Gratan::Logger::Helper
+  include Gratan::TemplateHelper
 
   def self.eval(dsl, path, options = {})
     self.new(path, options) do
@@ -14,10 +15,21 @@ class Gratan::DSL::Context
     @path = path
     @options = options
     @result = {}
+
+    @context = Hashie::Mash.new(
+      :path => path,
+      :options => options,
+      :templates => {}
+    )
+
     instance_eval(&block)
   end
 
   private
+
+  def template(name, &block)
+    @context.templates[name.to_s] = block
+  end
 
   def require(file)
     grantfile = (file =~ %r|\A/|) ? file : File.expand_path(File.join(File.dirname(@path), file))
@@ -52,7 +64,7 @@ class Gratan::DSL::Context
       end
 
       @result[[name, host]] = {
-        :objects => Gratan::DSL::Context::User.new(name, host, @options, &block).result,
+        :objects => Gratan::DSL::Context::User.new(@context, name, host, @options, &block).result,
         :options => options,
       }
     end

@@ -1,14 +1,16 @@
 class Gratan::DSL::Context::User
   include Gratan::DSL::Validator
   include Gratan::Logger::Helper
+  include Gratan::TemplateHelper
 
   attr_reader :result
 
-  def initialize(user, host, options, &block)
+  def initialize(context, user, host, options, &block)
     @object_identifier = "User `#{user}@#{host}`"
     @user = user
     @host = host
     @options = options
+    @context = context.merge(:user => user, :host => host, :user_options => options)
     @result = {}
     instance_eval(&block)
   end
@@ -29,7 +31,7 @@ class Gratan::DSL::Context::User
       end
     end
 
-    grant = {:privs => Gratan::DSL::Context::On.new(@user, @host, name, @options, &block).result}
+    grant = {:privs => Gratan::DSL::Context::On.new(@context, @user, @host, name, @options, &block).result}
     grant[:with] = options[:with] if options[:with]
     @result[name] = grant
   end

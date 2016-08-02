@@ -113,6 +113,25 @@ class Gratan::Driver
     ]
 
     update(sql)
+
+    if (identifier || '').empty?
+      set_password(user, host, identifier)
+    end
+  end
+
+  def set_password(user, host, password, options = {})
+    password ||= ''
+
+    unless options[:hash]
+      password = "PASSWORD('#{escape(password)}')"
+    end
+
+    sql = 'SET PASSWORD FOR %s = %s' % [
+      quote_user(user, host),
+      password,
+    ]
+
+    update(sql)
   end
 
   def set_require(user, host, required)
