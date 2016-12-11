@@ -70,6 +70,14 @@ Usage: gratan [options]
     -h, --help
 ```
 
+A default connection to a database can be established by setting the following environment variables:  
+- `GRATAN_DB_HOST`: database host
+- `GRATAN_DB_PORT`: database port
+- `GRATAN_DB_SOCKET`: database socket
+- `GRATAN_DB_DATABASE`: database database name
+- `GRATAN_DB_USER`: database user
+- `GRATAN_DB_PASSWORD`: database password
+
 ## Grantfile example
 
 ```ruby
