@@ -18,9 +18,14 @@ MAGIC_COMMENT = <<-EOS
 EOS
 
 mysql_options = {
-  :host     => 'localhost',
-  :username => 'root',
+  host: ENV['GRATAN_DB_HOST'] || 'localhost',
+  username: ENV['GRATAN_DB_USERNAME'] || 'root',
+  port: ENV['GRATAN_DB_PORT'] || 3306
 }
+
+mysql_options[:socket] = ENV['GRATAN_DB_SOCKET'] if ENV['GRATAN_DB_SOCKET']
+mysql_options[:password] = ENV['GRATAN_DB_PASSWORD'] if ENV['GRATAN_DB_PASSWORD']
+mysql_options[:database] = ENV['GRATAN_DB_DATABASE'] if ENV['GRATAN_DB_PASSWORD']
 
 options = {
   :dry_run    => false,
