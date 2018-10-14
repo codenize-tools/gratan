@@ -4,20 +4,25 @@ rvm:
   - 2.3
   - 2.4
   - 2.5
+cache:
+  - bundler
+  - apt
 env:
-  - MYSQL_VERSION=mysql-5.6
-  - MYSQL_VERSION=mysql-5.7
-matrix:
-  allow_failures:
-    - env: MYSQL_VERSION=mysql-5.7
-services:
-  - mysql
-before_install:
-  - gem update bundler
-  - sudo apt-get -qq update
-  - bash .travis/install_mysql.sh
+  matrix:
+    - MYSQ_PORT=14406 # MySQL 5.6
+    - MYSQ_PORT=14407 # MySQL 5.7
 before_script:
-  - mysql --version
-script:
+  - sudo service mysql stop
   - bundle install
+  - docker-compose up -d
+  - function mysql_ping { mysqladmin -u root -h 127.0.0.1 -P $MYSQ_PORT ping; }
+  - for i in {1..60}; do mysql_ping && break; sleep 1; done
+script:
   - bundle exec rake
+services:
+  - docker
+addons:
+  apt:
+    packages:
+      - mysql-client-core-5.6
+      - mysql-client-5.6

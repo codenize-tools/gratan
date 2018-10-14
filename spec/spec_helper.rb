@@ -28,7 +28,7 @@ def mysql
   retval = nil
 
   begin
-    client = Mysql2::Client.new(host: 'localhost', username: 'root')
+    client = Mysql2::Client.new(host: '127.0.0.1', username: 'root', port: ENV.fetch('MYSQL_PORT', 14406))
     retval = yield(client)
   ensure
     client.close if client
@@ -139,8 +139,9 @@ def client(user_options = {})
   end
 
   options = {
-    host: 'localhost',
+    host: '127.0.0.1',
     username: 'root',
+    port: ENV.fetch('MYSQL_PORT', 14406),
     ignore_user: IGNORE_USER,
     logger: Logger.new('/dev/null'),
   }
