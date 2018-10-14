@@ -73,7 +73,7 @@ Usage: gratan [options]
     -h, --help
 ```
 
-A default connection to a database can be established by setting the following environment variables:  
+A default connection to a database can be established by setting the following environment variables:
 - `GRATAN_DB_HOST`: database host
 - `GRATAN_DB_PORT`: database port
 - `GRATAN_DB_SOCKET`: database socket
@@ -134,6 +134,15 @@ user 'scott', 'localhost', identified: 'tiger' do
     include_template 'test db template', extra: ['INSERT', 'UPDATE']
   end
 end
+```
+
+## Run tests
+
+```sh
+bundle install
+docker-compose up -d
+bundle exec rake
+#MYSQL_PORT=14407 bundle exec rake # MySQL 5.7
 ```
 
 ## Similar tools

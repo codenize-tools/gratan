@@ -1,0 +1,12 @@
+mysql56:
+  image: "mysql:5.6"
+  ports:
+    - "14406:3306"
+  environment:
+    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+mysql57:
+  image: "mysql:5.6"
+  ports:
+    - "14407:3306"
+  environment:
+    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
