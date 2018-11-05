@@ -49,7 +49,7 @@ end
 
       expect(show_grants).to match_array [
         "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
-      ]
+      ].normalize
     end
   end
 

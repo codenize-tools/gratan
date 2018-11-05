@@ -64,7 +64,7 @@ end
         "GRANT SELECT, DELETE ON *.* TO 'scott'@'%' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
         "GRANT SELECT, DELETE ON *.* TO 'scott'@'127.0.0.1' REQUIRE SSL",
         "GRANT SELECT, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
-      ]
+      ].normalize
     end
   end
 
@@ -139,7 +139,7 @@ end
         "GRANT SELECT, INSERT ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
         "GRANT UPDATE, DELETE ON `test`.* TO 'scott'@'%'",
         "GRANT UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
-      ]
+      ].normalize
     end
   end
 end

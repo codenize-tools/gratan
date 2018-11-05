@@ -9,8 +9,8 @@ cache:
   - apt
 env:
   matrix:
-    - MYSQ_PORT=14406 # MySQL 5.6
-    - MYSQ_PORT=14407 # MySQL 5.7
+    - MYSQL57=0 MYSQ_PORT=14406 # MySQL 5.6
+    - MYSQL57=1 MYSQ_PORT=14407 # MySQL 5.7
 before_script:
   - sudo service mysql stop
   - bundle install

@@ -81,7 +81,7 @@ end
       expect(show_grants).to match_array [
         "GRANT ALL PRIVILEGES ON *.* TO 'bob'@'%' REQUIRE SSL",
         "GRANT SELECT ON `test`.* TO 'bob'@'%'",
-      ]
+      ].normalize
     end
   end
 

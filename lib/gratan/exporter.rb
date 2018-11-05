@@ -18,8 +18,12 @@ class Gratan::Exporter
         next unless user =~ @options[:target_user]
       end
 
+      if @options[:use_show_create_user]
+        create_user = @driver.show_create_user(user, host)
+      end
+
       @driver.show_grants(user, host) do |stmt|
-        grants << Gratan::GrantParser.parse(stmt)
+        grants << Gratan::GrantParser.parse(stmt, create_user)
       end
     end
 

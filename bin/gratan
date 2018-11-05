@@ -56,6 +56,8 @@ ARGV.options do |opt|
     opt.on(''  , '--ignore-not-exist')       {|v| options[:ignore_not_exist]       = true          }
     opt.on(''  , '--ignore-password-secret') {|v| options[:ignore_password_secret] = true          }
     opt.on(''  , '--skip-disable-log-bin')   {    options[:skip_disable_log_bin]   = true          }
+    opt.on(''  , '--override-sql-mode')      {    options[:override_sql_mode]      = true          }
+    opt.on(''  , '--use-show-create-user')   {    options[:use_show_create_user]   = true          }
     opt.on(''  , '--no-color')               {    options[:color]                  = false         }
     opt.on(''  , '--debug')                  {    options[:debug]                  = true          }
     opt.on(''  , '--auto-identify OUTPUT')   {|v| options[:identifier] = Gratan::Identifier::Auto.new(v, options) }
