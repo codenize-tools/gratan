@@ -35,7 +35,7 @@ end
       expect(show_grants).to match_array [
         "GRANT SELECT ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40'",
         "GRANT SELECT, INSERT, UPDATE ON `test`.* TO 'scott'@'localhost'",
-      ]
+      ].normalize
     end
   end
 end

@@ -38,7 +38,7 @@ end
       expect(show_grants).to match_array [
         "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40'",
         "GRANT SELECT, INSERT, UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
-      ]
+      ].normalize
     end
   end
 
@@ -97,7 +97,7 @@ end
         "GRANT SELECT ON `test`.* TO 'bob'@'%'",
         "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40'",
         "GRANT SELECT, INSERT, UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
-      ]
+      ].normalize
     end
   end
 
@@ -128,7 +128,7 @@ end
       expect(show_grants).to match_array [
         "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' WITH GRANT OPTION",
         "GRANT SELECT, INSERT, UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
-      ]
+      ].normalize
     end
   end
 

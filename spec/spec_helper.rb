@@ -23,12 +23,18 @@ RSpec.configure do |config|
   end
 end
 
+def mysql57?
+  ENV['MYSQL57'] == '1'
+end
+
+MYSQL_PORT = mysql57? ? 14407 : 14406
+
 def mysql
   client = nil
   retval = nil
 
   begin
-    client = Mysql2::Client.new(host: '127.0.0.1', username: 'root', port: ENV.fetch('MYSQL_PORT', 14406))
+    client = Mysql2::Client.new(host: '127.0.0.1', username: 'root', port: MYSQL_PORT)
     retval = yield(client)
   ensure
     client.close if client
@@ -127,6 +133,12 @@ def show_grants
       client.query("SHOW GRANTS FOR #{user_host}").each do |row|
         grants << row.values.first
       end
+
+    end
+  end
+
+  if mysql57?
+    grants.each do |grant|
     end
   end
 
@@ -141,10 +153,17 @@ def client(user_options = {})
   options = {
     host: '127.0.0.1',
     username: 'root',
-    port: ENV.fetch('MYSQL_PORT', 14406),
+    port: MYSQL_PORT,
     ignore_user: IGNORE_USER,
     logger: Logger.new('/dev/null'),
   }
+
+  if mysql57?
+    options.update(
+      override_sql_mode: true,
+      use_show_create_user: true,
+    )
+  end
 
   if ENV['DEBUG']
     logger = Gratan::Logger.instance
@@ -175,5 +194,19 @@ end
 def apply(cli = client)
   tempfile(yield) do |f|
     cli.apply(f.path)
+  end
+end
+
+class Array
+  def normalize
+    if mysql57?
+      self.map do |i|
+        i.sub(/ IDENTIFIED BY PASSWORD '[^']+'/, '')
+         .sub(/ REQUIRE \w+\b/, '')
+         .sub(/ WITH GRANT OPTION [\w ]+\z/, ' WITH GRANT OPTION')
+      end
+    else
+      self
+    end
   end
 end

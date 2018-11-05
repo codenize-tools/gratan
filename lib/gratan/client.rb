@@ -245,6 +245,7 @@ class Gratan::Client
 
     begin
       @driver.disable_log_bin_local
+      @driver.override_sql_mode
       @updated = false
       yield
       updated = @updated

@@ -20,6 +20,10 @@ class Gratan::Driver
     end
   end
 
+  def show_create_user(user, host)
+    query("SHOW CREATE USER #{quote_user(user, host)}").first.values.first
+  end
+
   def show_databases
     query("SHOW DATABASES").map {|i| i.values.first }
   end
@@ -202,6 +206,12 @@ class Gratan::Driver
   def disable_log_bin_local
     unless @options[:skip_disable_log_bin]
       query('SET SQL_LOG_BIN = 0')
+    end
+  end
+
+  def override_sql_mode
+    if @options[:override_sql_mode]
+      query('SET SQL_MODE = ""')
     end
   end
 

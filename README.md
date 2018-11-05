@@ -65,6 +65,8 @@ Usage: gratan [options]
         --ignore-not-exist
         --ignore-password-secret
         --skip-disable-log-bin
+        --override-sql-mode
+        --use-show-create-user
         --no-color
         --debug
         --auto-identify OUTPUT
@@ -142,7 +144,7 @@ end
 bundle install
 docker-compose up -d
 bundle exec rake
-#MYSQL_PORT=14407 bundle exec rake # MySQL 5.7
+# MYSQL57=1 bundle exec rake
 ```
 
 ## Similar tools

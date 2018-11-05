@@ -76,7 +76,7 @@ end
         "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
         "GRANT SELECT, INSERT, UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
         "GRANT USAGE ON *.* TO 'bob'@'localhost'",
-      ]
+      ].normalize
     end
   end
 
@@ -113,7 +113,7 @@ end
         "GRANT SELECT ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
         "GRANT UPDATE (host) ON `mysql`.`user` TO 'scott'@'localhost'",
         "GRANT USAGE ON *.* TO 'bob'@'localhost'",
-      ]
+      ].normalize
     end
   end
 
@@ -157,7 +157,7 @@ end
         "GRANT UPDATE (host) ON `mysql`.`user` TO 'scott'@'localhost'",
         "GRANT UPDATE, DELETE ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
         "GRANT USAGE ON *.* TO 'mary'@'localhost'",
-      ]
+      ].normalize
     end
   end
 
@@ -203,7 +203,7 @@ end
         "GRANT SELECT, INSERT ON *.* TO 'scott'@'localhost' IDENTIFIED BY PASSWORD '*F2F68D0BB27A773C1D944270E5FAFED515A3FA40' REQUIRE SSL",
         "GRANT UPDATE, DELETE ON `test`.* TO 'scott'@'localhost'",
         "GRANT USAGE ON *.* TO 'bob'@'localhost'",
-      ]
+      ].normalize
     end
   end
 end
