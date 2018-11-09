@@ -34,8 +34,15 @@ class Gratan::GrantParser
     required = $1
 
     if @create_user
-      @create_user.slice!(/\s+REQUIRE\s+(\S+(?:\s+'[^']+')?)(?:\s+.+)?\s+PASSWORD\s+.+\z/)
+      @create_user.slice!(/\s+REQUIRE\s+(\S+(?:\s+'[^']+')?)(?:\s+WITH\s+(.+))?\s+PASSWORD\s+.+\z/)
       required = $1
+      resource_option = $2
+
+      if resource_option
+        @parsed[:with] ||= ''
+        @parsed[:with] << ' ' << resource_option.strip
+        @parsed[:with].strip!
+      end
     end
 
     if required && required != 'NONE'
