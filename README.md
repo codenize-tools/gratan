@@ -6,7 +6,6 @@ It defines the state of MySQL permissions using Ruby DSL, and updates permission
 
 [![Gem Version](https://badge.fury.io/rb/gratan.svg)](http://badge.fury.io/rb/gratan)
 [![Build Status](https://travis-ci.org/codenize-tools/gratan.svg?branch=master)](https://travis-ci.org/codenize-tools/gratan)
-[![Coverage Status](https://coveralls.io/repos/codenize-tools/gratan/badge.svg?branch=master)](https://coveralls.io/r/codenize-tools/gratan?branch=master)
 
 ## Notice
 
