@@ -25,7 +25,7 @@ mysql_options = {
 
 mysql_options[:socket] = ENV['GRATAN_DB_SOCKET'] if ENV['GRATAN_DB_SOCKET']
 mysql_options[:password] = ENV['GRATAN_DB_PASSWORD'] if ENV['GRATAN_DB_PASSWORD']
-mysql_options[:database] = ENV['GRATAN_DB_DATABASE'] if ENV['GRATAN_DB_PASSWORD']
+mysql_options[:database] = ENV['GRATAN_DB_DATABASE'] if ENV['GRATAN_DB_DATABASE']
 
 options = {
   :dry_run    => false,

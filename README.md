@@ -80,7 +80,7 @@ A default connection to a database can be established by setting the following e
 - `GRATAN_DB_PORT`: database port
 - `GRATAN_DB_SOCKET`: database socket
 - `GRATAN_DB_DATABASE`: database database name
-- `GRATAN_DB_USER`: database user
+- `GRATAN_DB_USERNAME`: database user
 - `GRATAN_DB_PASSWORD`: database password
 
 ## Grantfile example
