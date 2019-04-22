@@ -215,6 +215,12 @@ class Gratan::Driver
     end
   end
 
+  def set_wait_timeout
+    if @options[:wait_timeout]
+      query("SET @@wait_timeout = #{@options[:wait_timeout]}")
+    end
+  end
+
   private
 
   def query(sql)
