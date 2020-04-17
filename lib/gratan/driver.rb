@@ -16,6 +16,7 @@ class Gratan::Driver
 
   def show_grants(user, host)
     query("SHOW GRANTS FOR #{quote_user(user, host)}").each do |row|
+      #puts row
       yield(row.values.first)
     end
   end
@@ -68,6 +69,7 @@ class Gratan::Driver
 
     objects.each do |object_or_regexp, object_options|
       expand_object(object_or_regexp).each do |object|
+        create(user, host, object, grant_options.merge(object_options))
         grant(user, host, object, grant_options.merge(object_options))
         granted = true
       end
@@ -83,15 +85,13 @@ class Gratan::Driver
     delete(sql)
   end
 
-  def grant(user, host, object, options)
+ def create(user, host, object, options)
     privs = options.fetch(:privs)
     identified = options[:identified]
     required = options[:required]
     with_option = options[:with]
 
-    sql = 'GRANT %s ON %s TO %s' % [
-      privs.join(', '),
-      quote_object(object),
+    sql = 'create user if not exists %s' % [
       quote_user(user, host),
     ]
 
@@ -110,10 +110,38 @@ class Gratan::Driver
     end
   end
 
-  def identify(user, host, identifier)
-    sql = 'GRANT USAGE ON *.* TO %s IDENTIFIED BY %s' % [
+  def grant(user, host, object, options)
+    privs = options.fetch(:privs)
+    identified = options[:identified]
+    required = options[:required]
+    with_option = options[:with]
+
+    sql = 'GRANT %s ON %s TO %s' % [
+      privs.join(', '),
+      quote_object(object),
       quote_user(user, host),
-      quote_identifier(identifier),
+    ]
+
+    #sql << " IDENTIFIED BY #{quote_identifier(identified)}" if identified
+    #sql << " REQUIRE #{required}" if required
+    #sql << " WITH #{with_option}" if with_option
+
+    begin
+      update(sql)
+    rescue Mysql2::Error => e
+      if @options[:ignore_not_exist] and e.error_number == ER_NO_SUCH_TABLE
+        log(:warn, e.message, :color => :yellow)
+      else
+        raise e
+      end
+    end
+  end
+
+  def identify(user, host, identifier)
+    #sql = 'GRANT USAGE ON *.* TO %s IDENTIFIED BY %s' % [
+    sql = 'GRANT USAGE ON *.* TO %s ' % [
+      quote_user(user, host),
+      #quote_identifier(identifier),
     ]
 
     update(sql)
@@ -262,8 +290,9 @@ class Gratan::Driver
 
     unless identifier =~ /\APASSWORD\s+'.+'\z/
       identifier = "'#{escape(identifier)}'"
+    else 
+      identifier = identifier.sub(/\APASSWORD\s+/,'')
     end
-
     identifier
   end
 end
