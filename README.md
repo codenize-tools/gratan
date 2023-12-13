@@ -92,7 +92,7 @@ user "scott", "%" do
     grant "USAGE"
   end
 
-  on "test.*", expired: '2014/10/08', identified: "PASSWORD '*ABCDEF'" do
+  on "test.*", expired: '2014/10/08', identified: "*ABCDEF" do
     grant "SELECT"
     grant "INSERT"
   end
@@ -141,9 +141,9 @@ end
 
 ```sh
 bundle install
-docker-compose up -d
+docker compose up -d
 bundle exec rake
-# MYSQL57=1 bundle exec rake
+# MYSQL80=1 bundle exec rake
 ```
 
 ## Similar tools
