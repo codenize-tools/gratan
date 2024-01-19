@@ -63,8 +63,18 @@ class Gratan::Driver
 
   def create_user(user, host, options = {})
     objects = options[:objects]
+    identified = options[:options][:identified]
+    required = options[:required]
+    with_option = options[:with]
+    auth_plugin = options[:auth_plugin] || "mysql_native_password"
     grant_options = options[:options]
     granted = false
+
+    sql = "CREATE USER #{quote_user(user, host)}"
+    sql << " IDENTIFIED WITH #{auth_plugin} AS #{quote_identifier(identified)}" if identified
+    sql << " REQUIRE #{required}" if required
+    sql << " WITH #{with_option}" if with_option
+    update(sql)
 
     objects.each do |object_or_regexp, object_options|
       expand_object(object_or_regexp).each do |object|
@@ -85,7 +95,6 @@ class Gratan::Driver
 
   def grant(user, host, object, options)
     privs = options.fetch(:privs)
-    identified = options[:identified]
     required = options[:required]
     with_option = options[:with]
 
@@ -95,10 +104,8 @@ class Gratan::Driver
       quote_user(user, host),
     ]
 
-    sql << " IDENTIFIED BY #{quote_identifier(identified)}" if identified
     sql << " REQUIRE #{required}" if required
     sql << " WITH #{with_option}" if with_option
-
     begin
       update(sql)
     rescue Mysql2::Error => e
@@ -110,8 +117,8 @@ class Gratan::Driver
     end
   end
 
-  def identify(user, host, identifier)
-    sql = 'GRANT USAGE ON *.* TO %s IDENTIFIED BY %s' % [
+  def identify(user, host, identifier, auth_plugin = "mysql_native_password")
+    sql = "ALTER USER %s IDENTIFIED WITH #{auth_plugin} AS %s" % [
       quote_user(user, host),
       quote_identifier(identifier),
     ]
@@ -127,7 +134,7 @@ class Gratan::Driver
     password ||= ''
 
     unless options[:hash]
-      password = "PASSWORD('#{escape(password)}')"
+      password = "SELECT CONCAT('*', UPPER(SHA1(UNHEX(SHA1('#{escape(password)}'))))) AS PASSWORD"
     end
 
     sql = 'SET PASSWORD FOR %s = %s' % [
@@ -166,7 +173,7 @@ class Gratan::Driver
 
   def revoke0(user, host, object, privs)
     sql = 'REVOKE %s ON %s FROM %s' % [
-      privs.join(', '),
+      privs.join(', ').gsub('\'', '').strip,
       quote_object(object),
       quote_user(user, host),
     ]

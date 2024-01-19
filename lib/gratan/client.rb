@@ -132,9 +132,9 @@ class Gratan::Client
   end
 
   def walk_identified(user, host, expected_identified, actual_identified)
-    if actual_identified == 'PASSWORD <secret>'
+    if actual_identified == '<secret>'
       unless @options[:ignore_password_secret]
-        log(:warn, "cannot change the password (`PASSWORD <secret>`)", :color => :yellow)
+        log(:warn, "cannot change the password (`<secret>`)", :color => :yellow)
       end
     elsif expected_identified != actual_identified
       @driver.identify(user, host, expected_identified)

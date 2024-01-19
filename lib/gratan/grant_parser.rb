@@ -66,10 +66,10 @@ class Gratan::GrantParser
   end
 
   def parse_main
-    md = /\AGRANT\s+(.+?)\s+ON\s+(.+?)\s+TO\s+'(.*)'@'(.+)'\z/.match(@stmt)
+    md = /\AGRANT\s+(.+?)\s+ON\s+(.+?)\s+TO\s+'(.*)'@'(.+)'\z/.match(@stmt.gsub('`', '\''))
     privs, object, user, host = md.captures
     @parsed[:privs] = parse_privs(privs.strip)
-    @parsed[:object] = object.gsub('`', '').strip
+    @parsed[:object] = object.gsub('\'', '').strip
     @parsed[:user] = user
     @parsed[:host] = host
   end

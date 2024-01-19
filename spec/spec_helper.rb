@@ -13,11 +13,11 @@ RSpec.configure do |config|
   end
 end
 
-def mysql57?
-  ENV['MYSQL57'] == '1'
+def mysql80?
+  ENV['MYSQL80'] == '1'
 end
 
-MYSQL_PORT = mysql57? ? 14407 : 14406
+MYSQL_PORT = mysql80? ? 3308 : 3307
 
 def mysql
   client = nil
@@ -127,7 +127,7 @@ def show_grants
     end
   end
 
-  if mysql57?
+  if mysql80?
     grants.each do |grant|
     end
   end
@@ -148,7 +148,7 @@ def client(user_options = {})
     logger: Logger.new('/dev/null'),
   }
 
-  if mysql57?
+  if mysql80?
     options.update(
       override_sql_mode: true,
       use_show_create_user: true,
@@ -189,7 +189,7 @@ end
 
 class Array
   def normalize
-    if mysql57?
+    if mysql80?
       self.map do |i|
         i.sub(/ IDENTIFIED BY PASSWORD '[^']+'/, '')
          .sub(/ REQUIRE \w+\b/, '')
