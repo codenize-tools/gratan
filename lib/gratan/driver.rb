@@ -173,7 +173,7 @@ class Gratan::Driver
 
   def revoke0(user, host, object, privs)
     sql = 'REVOKE %s ON %s FROM %s' % [
-      privs.join(', '),
+      privs.join(', ').gsub('\'', '').strip,
       quote_object(object),
       quote_user(user, host),
     ]
